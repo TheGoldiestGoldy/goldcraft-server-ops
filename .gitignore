@@ -1,0 +1,42 @@
+# Secrets and personal data
+.env
+.env.*
+*.token
+*token*
+*secret*
+*password*
+ops.json
+whitelist.json
+usercache.json
+usernamecache.json
+banned-*.json
+playerdata/
+stats/
+advancements/
+
+# Raw logs and crashes
+*.log
+*.log.gz
+crash-reports/
+debug/
+
+# Worlds, caches and binaries
+world/
+*.jar
+*.zip
+*.7z
+*.rar
+*.db
+*.sqlite
+*.sqlite3
+*.nbt
+*.mca
+*.mcr
+
+# Generated local state
+data/current-snapshot.json
+__pycache__/
+*.pyc
+.DS_Store
+.idea/
+.vscode/
