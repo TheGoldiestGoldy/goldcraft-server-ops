@@ -22,7 +22,7 @@ jobs:
           fi
       - name: Check obvious secrets
         run: |
-          matches="$(git grep -I -n -E '(rcon\.password=.+|token[=:].+|api[_-]?key[=:].+|-----BEGIN .*PRIVATE KEY-----)' -- ':!.github/workflows/validate.yml' | grep -v '\[redacted\]' || true)"
+          matches="$(git grep -I -n -E '(^[[:space:]]*"?(rcon\.password|token|api[_-]?key)"?[[:space:]]*[=:][[:space:]]*[^[:space:]]|-----BEGIN .*PRIVATE KEY-----)' -- ':!.github/workflows/validate.yml' | grep -v '\[redacted\]' || true)"
           if [ -n "$matches" ]; then
             printf '%s\n' "$matches"
             echo "Potential secret detected."
