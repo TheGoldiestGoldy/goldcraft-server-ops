@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import hmac
 import json
+import mimetypes
 import os
 import re
 import signal
@@ -16,6 +17,9 @@ SERVER_DIR = (HOME_DIR / "Minecraft Fabric server 1.21.1").resolve()
 CLIENT_MODS_DIR = (HOME_DIR / ".local/share/PollyMC-Local/instances/1.21.1/minecraft/mods").resolve()
 INVENTORY_FILE = HOME_DIR / ".local/state/goldcraft-control/client-inventory.json"
 DOWNLOAD_DIR = INVENTORY_FILE.parent / "downloads"
+HERE = Path(__file__).resolve().parent
+DEFAULT_SITE_DIR = HERE.parent / "site" if (HERE.parent / "site").is_dir() else HERE / "site"
+SITE_DIR = Path(os.environ.get("GOLDCRAFT_SITE_DIR", DEFAULT_SITE_DIR)).resolve()
 START_COMMAND = ["/bin/bash", "./start.sh"]
 AUTH_VALUE = (HOME_DIR / ".config/goldcraft-control/token").read_text().strip()
 LOG_DIR = HOME_DIR / ".local/state/goldcraft-control"
@@ -215,10 +219,43 @@ class Handler(BaseHTTPRequestHandler):
                     remaining -= len(block)
         except (BrokenPipeError, ConnectionResetError):
             pass
+    def send_static(self, request_path):
+        allowed = {
+            "/": "index.html",
+            "/index.html": "index.html",
+            "/styles.css": "styles.css",
+            "/app.js": "app.js",
+            "/manifest.webmanifest": "manifest.webmanifest",
+            "/sw.js": "sw.js",
+            "/icon.svg": "icon.svg",
+            "/404.html": "404.html",
+        }
+        filename = allowed.get(request_path)
+        if filename is None:
+            return False
+        path = SITE_DIR / filename
+        if not path.is_file():
+            self.send_json(503, {"error": "Dashboard files are not installed"})
+            return True
+        body = path.read_bytes()
+        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        if path.suffix == ".webmanifest":
+            content_type = "application/manifest+json"
+        self.send_response(200)
+        self.send_header("Content-Type", content_type + ("; charset=utf-8" if content_type.startswith("text/") or content_type.endswith("json") or content_type.endswith("javascript") else ""))
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-cache" if path.suffix == ".html" else "public, max-age=300")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.end_headers()
+        self.wfile.write(body)
+        return True
     def authorized(self):
         return hmac.compare_digest(self.headers.get("Authorization", ""), "Bearer " + AUTH_VALUE)
     def do_GET(self):
         request_path = self.path.split("?", 1)[0]
+        if self.send_static(request_path):
+            return
         if request_path.startswith("/download/"):
             return self.send_download(request_path.removeprefix("/download/"))
         if request_path == "/public":
