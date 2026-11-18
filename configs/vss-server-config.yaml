@@ -1,0 +1,81 @@
+# LOD Server Support — Fabric/NeoForge server defaults.
+# Edit this file, then run /vsslod reload. Settings marked [restart] wait for restart.
+config_version: 1
+
+# Serves distant terrain to compatible clients beyond vanilla's view distance.
+# This does not increase the server's simulation distance or keep distant chunks ticking.
+service:
+  enabled: true
+  require_permission: false
+
+lod:
+  distance:
+    default_chunks: 192
+    by_dimension:
+      "minecraft:overworld": 192
+      "minecraft:the_nether": 64
+      "minecraft:the_end": 256
+
+generation:
+  enabled: false
+  concurrency:
+    global: 40
+    per_player: 40
+  timeout_ticks: 1200
+
+network:
+  bandwidth:
+    per_player_mib_per_second: 2
+    global_mib_per_second: 4
+  send_queue_limit_per_player: 256
+  ping_backstop: true
+  send_pacing: true
+  yield_to_vanilla: true
+
+updates:
+  dirty_broadcast_interval_ticks: 200
+  region_summaries: true
+
+storage:
+  disk:
+    reader_threads: 0
+    max_concurrent_reads: 0
+    background_priority: true
+    split_background_reads: true
+  timestamp_cache_mib_per_dimension: 0
+  miss_memo_ttl_seconds: 30
+  lod_store:
+    enabled: false
+    max_size_mib: 30720
+    resweep_interval_seconds: 0
+    backfill:
+      enabled: false
+      columns_per_second: 100
+
+serialization:
+  selective_nbt_parse: true
+  nbt_transcode: true
+  compressed_columns: true
+
+compatibility:
+  protocols:
+    v16: true
+    v18: true
+    v19: true
+  via_mismatch_guard: true
+
+privacy:
+  xray:
+    mode: "auto"
+    max_y_blocks: 64
+    hidden_blocks: []
+  request_no_map_ingestion: false
+
+far_players:
+  mode: "on"
+  update_interval_ticks: 10
+  distance:
+    min_blocks: 0
+    max_blocks: 2048
+  send_spectators: false
+  excluded_players: []

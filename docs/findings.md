@@ -1,66 +1,95 @@
 # Findings: what worked and what did not
 
-Last reviewed: 16 November 2026.
-
-This public report contains aggregate technical evidence only. Player identifiers, raw logs, infrastructure addresses, machine-specific storage details and exact world coordinates are excluded.
+Snapshot date: 16 November 2026.
 
 ## Confirmed successes
 
-### Controlled startup
+### Stable controlled startup
 
 **Status: Confirmed**
 
-The tested launcher uses the intended Fabric world, rejects duplicate server processes and uses Java 21 consistently. This corrected older startup methods that could overlap or select inconsistent Java installations.
+The active Linux launcher:
 
-### Reviewed world maintenance
+- requires the intended world and Fabric launcher JAR;
+- refuses duplicate launches using both a file lock and a port check;
+- uses Java 21;
+- allocates 4 GiB initially and 12 GiB maximum;
+- uses Generational ZGC with a 10 GiB soft maximum;
+- writes rotating GC and safepoint logs.
+
+This is a material improvement over earlier launchers that allowed overlapping starts or used inconsistent Java versions.
+
+### World trim
 
 **Status: Confirmed**
 
-A reviewed world trim removed unused generated terrain while preserving the retained city/rail area and MTR records. A recovery copy was verified, and the retained world completed a post-maintenance smoke start at normal idle tick rate.
+The 22 October trim:
 
-Exact masks and coordinate maps remain private.
+- retained 1,883 terrain region files;
+- retained 1,925,135 stored chunk slots;
+- removed 5,548 terrain regions plus related POI/entity files;
+- recovered 23.09 GiB;
+- preserved MTR route, station, platform, depot, siding and lift records;
+- passed a post-trim smoke start at 20 TPS with 0.7 ms P95 tick time while idle.
 
-### Modern Furniture compatibility patch
+The recovery copy of removed files was verified, but the separate full-world backup was incomplete.
+
+### Modern Furniture server patch
 
 **Status: Confirmed**
 
-The stock server build called a client-only rendering event and failed on a dedicated server. A local server-side patch preserved content registration while omitting that event. Validation covered a fresh world, block placement and persistence, clean save and restart.
+The stock server JAR called a client-only rendering event and failed on a dedicated server. The locally patched server JAR preserves registration while omitting that event. Validation covered a fresh world, block placement/persistence, a clean save, and a restart.
 
 **Revisit:** check for an upstream fixed release before every mod update.
 
-### Client inventory and profiles
+### Daily operations automation
 
 **Status: Confirmed**
 
-The mod inventories, resource-pack list, shader selection and three client performance profiles are generated from the tested installation. Published SHA-256 values allow players to verify exact files without redistributing third-party binaries through this repository.
+The dashboard bridge and daily inventory timer are enabled. The inventory job publishes exact mod metadata, resource packs, shaders and three tuned client profiles with SHA-256 checksums. Downloads support byte ranges.
 
 ### LOD data preservation
 
 **Status: Confirmed**
 
-Previously generated LOD data was preserved while automatic bulk serving was disabled during troubleshooting. This allows later controlled comparison without forcing large transfers during ordinary play.
+The active world contains a 5.01 GiB VSS/Voxy derived store. VSS serving is disabled, but the data is present. A separate 5.01 GiB restore artifact also exists under maintenance.
 
 ## Confirmed failures or regressions
 
-### Automatic LOD transfers
+### Automatic DH/VSS client downloads
 
 **Status: Confirmed symptom; mixed root cause**
 
-Clients received large background LOD queues that made ordinary play impractical. Distant Horizons and the server-side derived-data system are independent, so disabling one path did not necessarily stop the other or client-local generation.
+Players received large automatic LOD transfers that made normal play impractical. Disabling one in-game DH command did not reliably stop all observed activity because DH and VSS are independent systems and real-time DH updates remained enabled.
 
-Current containment keeps bulk synchronization disabled while preserving the generated data. See [LOD download loop](issues/lod-download-loop.md).
+Current protective state:
+
+- DH synchronizeOnLoad: false
+- DH request distance: 128 chunks
+- DH rate limits: 4 generation / 8 sync requests per second
+- DH per-player bandwidth: 2 MiB/s
+- VSS service: disabled
+- VSS store: preserved
+
+See [LOD download loop](issues/lod-download-loop.md).
 
 ### Oversized pregeneration
 
 **Status: Confirmed**
 
-An earlier pregeneration plan covered an unnecessarily large area, caused long stalls and risked generating outside the reviewed play area. Automatic resume remains disabled. Future pregeneration must use a reviewed boundary and checkpointed tests.
+The old Chunky task covered an extremely large area and was force-stopped near 43.2%. It risked generating outside the retained city/rail mask and produced long stalls. Automatic resume is disabled and the old task file was renamed.
 
-### Excessive view distance
+### High view distance
 
 **Status: Confirmed regression**
 
-Earlier high server view-distance settings were associated with severe chunk-loading stutter. The active baseline now uses a conservative distance while controlled capacity testing remains incomplete.
+Earlier 24-chunk and 16-chunk server view distances were associated with severe chunk-loading stutter. The current setting is 8 chunks with simulation distance 5.
+
+### ScalableLux
+
+**Status: Confirmed disabled**
+
+ScalableLux 0.3.0 alpha is in the disabled-mod directory. It is not part of the current working baseline.
 
 ## Tentative findings
 
@@ -68,20 +97,21 @@ Earlier high server view-distance settings were associated with severe chunk-loa
 
 **Status: Tentative**
 
-Rubberbanding becomes worse when players are far apart, which increases simultaneously active chunk regions, reads, ticking and possible generation. Historical evidence supports tick pressure but does not identify CPU, storage, networking or one mod as the dominant cause.
+The symptom becomes worse when players are far apart. That increases simultaneously active chunk regions, disk reads, entity ticking and potential generation. Historical logs contain 1,227 "can't keep up" matches and 1,369 tick-stall matches, but these are not controlled measurements.
 
-A controlled comparison with server profiling is still required.
+A two-player Spark comparison is still required before attributing the problem to CPU, storage, a specific mod, or networking.
 
-### Historical error volume
+### Error volume
 
 **Status: Tentative interpretation**
 
-Archived logs contain many repeated data-fixer and startup messages. Their aggregate count is not a count of independent failures. Decisions should use targeted crash records and controlled profiling instead.
+The log collector counted more than one million ERROR-labelled lines across 160 files. Many are repeated "No data fixer registered" messages and do not represent one million independent failures. Use targeted crash descriptions and Spark evidence, not the raw total, for decisions.
 
 ## Unknowns
 
 - Maximum stable simultaneous player count.
-- Busy-area tick and frame-time behavior at increasing player counts.
-- Whether every retained legacy chunk is free of removed block identifiers.
-- Whether real-time LOD updates can run without forced bulk synchronization.
-- Which subsystem dominates separated-player stalls.
+- Busy-city TPS and frame-time behavior at 5, 10 and 15 players.
+- Whether every retained legacy chunk is free of removed block IDs.
+- Whether DH real-time updates alone can run without forced bulk sync.
+- Actual client LOD transfer rate after the latest restore.
+- Which mod dominates two-player separated-region stalls.

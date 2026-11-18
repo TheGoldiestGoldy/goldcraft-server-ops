@@ -1,32 +1,47 @@
 # Performance experiment history
 
-## View-distance reduction
+## View-distance reductions
 
-Early high-distance settings produced severe chunk-loading stutter. A lower conservative baseline improved stability, especially when players occupied distant regions.
+| Stage | Server view distance | Result |
+|---|---:|---|
+| Early baseline | 24 | Severe chunk-loading stutter |
+| First reduction | 16 | Better, but still costly for distant players |
+| Current | 8 | Chosen stability baseline |
+| Current simulation | 5 | Reduced active ticking radius |
 
-**Decision:** keep conservative distances until a controlled capacity test justifies an increase.
+**Decision:** keep 8/5 until a controlled player-capacity test justifies increasing it.
 
-## Reviewed world trim
+## World trim, 22 October 2026
 
-A reviewed maintenance pass removed unused generated terrain, preserved the retained transit data and passed an idle smoke test at normal tick rate.
+- Removed 23.09 GiB.
+- Preserved 1,883 terrain regions.
+- Preserved MTR records.
+- Idle post-trim Spark check: 20 TPS, 0.7 ms P95 tick.
+- VSS, DH automatic work and Chunky were off during the smoke test.
 
-**Result:** successful and retained. Exact boundaries and recovery locations remain private.
+**Result:** successful and retained.
 
 ## Modern Furniture validation
 
-- Stock server build: failed because it initialized a client-only rendering event.
-- Local server patch: started, registered content, saved placed blocks and loaded them after restart.
+- Stock server JAR: failed due to client-only model initialization.
+- Patched server JAR: started, registered content, saved placed content and loaded it after restart.
 
-**Result:** patch retained; an upstream replacement remains preferable.
+**Result:** patch retained; upstream replacement remains preferable.
 
-## Pregeneration
+## Chunky
 
-An oversized unattended generation task caused stalls and was stopped before completion.
+- Historical task used oversized bounds.
+- Force-stopped near 43.2%.
+- Automatic resume disabled.
+- Missing legacy registry entries were observed.
 
-**Result:** failed as an unattended strategy. Future tasks must be bounded, reviewed and checkpointed.
+**Result:** failed as an unattended strategy. Future tasks must be small, reviewed and manual.
 
-## LOD delivery
+## DH and VSS
 
-Automatic serving or backfill created unwanted client work. The available data remains useful, but automatic normal-play delivery is not accepted without controlled comparison.
+- Automatic serving/backfill created unwanted client work.
+- VSS cache preparation once reached roughly 67-85 columns/s.
+- Most recent backfill prepared zero new columns and skipped 54,305 cached columns.
+- Native DH and VSS transfer limits are independent.
 
-**Result:** bulk delivery disabled; isolated testing required.
+**Result:** data is useful, but automatic normal-play delivery is not accepted. Controlled A/B testing is required.

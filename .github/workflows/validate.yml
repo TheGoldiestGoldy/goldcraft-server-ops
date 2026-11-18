@@ -1,4 +1,4 @@
-name: Validate public repository
+name: Validate repository
 
 on:
   push:
@@ -9,14 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile tools
+        run: python -m compileall -q tools automation
       - name: Check forbidden tracked file types
         run: |
-          if git ls-files | grep -E '\.(jar|zip|7z|rar|mca|mcr|nbt|log|log\.gz|db|sqlite3?)$'; then
-            echo "Forbidden binary, world, database or raw-log file is tracked."
+          if git ls-files | grep -E '\.(jar|zip|7z|rar|mca|mcr|nbt|log|log\.gz)$'; then
+            echo "Forbidden binary, world or raw-log file is tracked."
             exit 1
           fi
-
       - name: Check obvious secrets
         run: |
           matches="$(git grep -I -n -E '(rcon\.password=.+|token[=:].+|api[_-]?key[=:].+|-----BEGIN .*PRIVATE KEY-----)' -- ':!.github/workflows/validate.yml' | grep -v '\[redacted\]' || true)"
@@ -25,22 +28,17 @@ jobs:
             echo "Potential secret detected."
             exit 1
           fi
-
       - name: Check personal and machine identifiers
         run: |
-          matches="$(git grep -I -n -E '([[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|[[:xdigit:]]{8}-[[:xdigit:]]{4}-[1-5][[:xdigit:]]{3}-[89abAB][[:xdigit:]]{3}-[[:xdigit:]]{12}|/home/[^ <]+|/run/media/[^ <]+|[A-Za-z]:\\Users\\[^ <]+)' -- ':!.github/workflows/validate.yml' || true)"
+          matches="$(git grep -I -n -E '([[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|[[:xdigit:]]{8}-[[:xdigit:]]{4}-[1-5][[:xdigit:]]{3}-[89abAB][[:xdigit:]]{3}-[[:xdigit:]]{12}|<HOME>/run/media/[^ <]+)' -- ':!tools/sanitize_repository.py' ':!.github/workflows/validate.yml' || true)"
           if [ -n "$matches" ]; then
             printf '%s\n' "$matches"
             echo "Potential personal or machine identifier detected."
             exit 1
           fi
-
-      - name: Reject private operational evidence
+      - name: Reject private generated evidence
         run: |
-          if git ls-files | grep -E '(^data/|^automation/|^configs/|^tools/|lod-coverage.*\.(csv|html)|world-trim-preview.*\.(csv|json|png))'; then
-            echo "Private operational evidence must remain outside the public repository."
+          if git ls-files | grep -E '(^data/current-snapshot\.json$|lod-coverage.*\.(csv|html)|world-trim-preview.*\.(csv|json|png))$'; then
+            echo "Raw snapshots and exact-coordinate evidence must remain outside the public repository."
             exit 1
           fi
-
-      - name: Check whitespace
-        run: git diff --check

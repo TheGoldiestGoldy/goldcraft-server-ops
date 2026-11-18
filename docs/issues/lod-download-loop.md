@@ -2,37 +2,40 @@
 
 ## Symptom
 
-Clients displayed very large LOD download queues even when pregeneration was not running. Disabling one Distant Horizons command did not consistently stop the observed activity.
+Clients displayed large LOD download queues, sometimes hundreds of thousands of remaining items, even when pregeneration was not running. Disabling one DH command did not consistently stop the observed download behavior.
 
 ## Confirmed facts
 
-- Distant Horizons and the server-side derived-data system are separate LOD paths.
-- Previously generated LOD data remains preserved privately.
-- Bulk server-side derived-data serving is currently disabled.
-- Automatic Distant Horizons synchronization on join is currently disabled.
-- Real-time updates and client-local generation are separate behaviors.
-- Earlier client evidence recorded severe adaptive slowdown after a latency spike.
+- Distant Horizons and VSS/Voxy are separate LOD systems.
+- The active world still contains a 5.01 GiB VSS/Voxy store.
+- VSS serving is currently disabled.
+- DH synchronizeOnLoad is currently false.
+- DH real-time updates are currently true.
+- DH request distance is currently limited to 128 chunks.
+- A prior VSS backfill skipped 54,305 already cached columns and prepared zero new columns.
+- A client log recorded adaptive slowdown to 64 KB/s after a latency spike.
 
 ## Likely explanation
 
-More than one producer or transport was active during earlier tests. Turning off one synchronization option would not stop the other server system, real-time updates or client-local generation.
+More than one producer/transport was active during earlier tests. Turning off DH sync alone would not stop VSS, and turning off VSS would not necessarily stop DH real-time updates or client-local generation.
 
 ## Current containment
 
-- Bulk synchronization is disabled.
-- Generation and synchronization rates use conservative limits.
-- Existing LOD stores remain preserved.
-- Automatic pregeneration resume is disabled.
+- VSS enabled: false
+- DH synchronizeOnLoad: false
+- DH generation/sync rates reduced
+- Existing LOD stores preserved
+- Automatic Chunky resume disabled
 
 ## Next controlled test
 
-1. Start with both server LOD transfer paths disabled.
+1. Start with both VSS and DH sync off.
 2. Join one client and prove that no bulk queue starts.
-3. Enable only one server path and measure for ten minutes.
-4. Reset, enable only the other path and repeat.
-5. Compare transferred bytes, queue behavior, tick rate and client frame time.
-6. Keep the better system and disable the other during ordinary play.
+3. Enable only VSS and measure for 10 minutes.
+4. Reset and enable only DH synchronizeOnLoad.
+5. Compare bytes, queue counts, TPS and client frame time.
+6. Keep the better system and disable the other for normal play.
 
 ## Success criterion
 
-Joining the server must not block ordinary play. Background LOD work may continue only if queue growth, bandwidth and frame-time impact remain bounded and the player can opt out.
+Joining the server must not block ordinary play. Background LOD transfer may continue only if its queue, bandwidth and frame-time impact remain bounded and the player can opt out.

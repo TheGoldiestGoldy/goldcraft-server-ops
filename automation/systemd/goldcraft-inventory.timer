@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh Goldcraft client inventory every day
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=5m
+Unit=goldcraft-inventory.service
+
+[Install]
+WantedBy=timers.target

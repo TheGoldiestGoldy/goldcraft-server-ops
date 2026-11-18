@@ -1,0 +1,6 @@
+[Unit]
+Description=Refresh Goldcraft public client inventory
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 <HOME>/.local/share/goldcraft-control/inventory.py

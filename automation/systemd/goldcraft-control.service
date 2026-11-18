@@ -1,0 +1,21 @@
+[Unit]
+Description=Goldcraft Minecraft dashboard control bridge
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 <HOME>/.local/share/goldcraft-control/bridge.py
+Restart=on-failure
+RestartSec=3
+KillMode=process
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths="<HOME>/Minecraft Fabric server 1.21.1" <HOME>/.local/state/goldcraft-control
+RestrictAddressFamilies=AF_INET AF_INET6
+UMask=0077
+
+[Install]
+WantedBy=default.target
