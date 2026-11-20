@@ -63,3 +63,27 @@ Snapshot generated: 2026-11-16T23:14:33.598396+00:00
 
 The VSS service is currently disabled, but the active world's derived store remains on disk.
 Read the current incident record in docs/issues/lod-download-loop.md before changing DH or VSS.
+
+## Read-only configuration audit: 20 November 2026 (UTC)
+
+This is a newer **filesystem observation**, not a successful startup or player-load test. The 16 November snapshot above is retained for historical comparison. The dedicated server was not running as a Java process during this inspection, so the values below are **on-disk configuration**, not independently verified active runtime settings.
+
+| Checked item | 16 Nov repository snapshot | 20 Nov local disk observation |
+|---|---|---|
+| Server mod JAR files | 85 inventoried entries | 82 `.jar` files |
+| Disabled mod files | 1 disabled (README) | 1 `.disabled` file |
+| DH `synchronizeOnLoad` | false | false |
+| DH `enableRealTimeUpdates` | true | false |
+| DH `generationRequestRateLimit` | 4 | 20 |
+| DH `syncOnLoadRateLimit` | 8 | 50 |
+| DH `globalBandwidthLimit` | 4096 | 0 |
+| DH `playerBandwidthLimit` | 2048 | 4096 |
+| DH `numberOfThreads` | 2 | 2 |
+| Server view / simulation distance | 8 / 5 | 8 / 5 |
+| Server max players | 20 | 20 |
+| Region compression | lz4 | lz4 |
+| Synchronous chunk writes | false | false |
+
+**Important:** The changed DH rate limits and bandwidth configuration have not been validated for transfer behavior, memory use, TPS, MSPT, or client FPS. A configured global bandwidth limit of `0` must not be described as a proven effective unlimited rate without confirming the mod's semantics. No recommendation to deploy these settings is implied. The JAR count difference is an inventory discrepancy, not proof that three mods were deliberately removed or that the server can start successfully.
+
+The locally inspected MTR 4.1.0-beta.2, Distant Horizons 3.3.3, and Voxy Server Side JAR SHA-256 hashes **match** their existing entries in [the server mod inventory](../inventory/server-mods.md). No binaries, raw logs, addresses, player data, or live configuration files were uploaded. A full sanitized mod inventory regeneration and controlled restart/performance validation remain outstanding.
