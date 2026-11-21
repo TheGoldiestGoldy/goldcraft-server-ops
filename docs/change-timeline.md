@@ -35,3 +35,15 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 2026-11-16T22:44:29.546210+00:00 | config/DistantHorizons.toml.before-range-validation-20261116.bak | file | 0.0 MiB |
 | 2026-11-16T23:01:00.073403+00:00 | maintenance/vss-restore-audit-20261116 | directory | 5.9 MiB |
 | 2026-11-16T23:06:49.471740+00:00 | maintenance/vss-restore-20261116 | directory | 5131.8 MiB |
+
+
+## Operational events (UTC; 20–21 November 2026)
+
+| Time | Event | Verified result / limitation |
+|---|---|---|
+| 2026-11-20 14:24:39 | systemd-oomd host memory-pressure action | PollyMC scope marked for termination at 97.21% memory and 90.01% swap; 233 processes in that scope were killed |
+| 2026-11-20 14:42 | Temporary JVM memory trial | Server and client soft maximum changed from 10 GiB to 8 GiB; uncommit delay from 300 to 60 seconds; no controlled A/B result |
+| 2026-11-20 14:52:30–15:09:34 | Temporary memory sampling window | 16 observations; minimum MemAvailable 875.3 MiB; maximum swap used 11,992.2 MiB; PSS fields all zero and excluded |
+| 2026-11-20 15:10 | Memory experiment closed | Sampler timer disabled; persistent server/client settings observed restored to 10 GiB soft maximum / 300-second delay |
+| 2026-11-20 15:27:42–15:28:10 | Server boot-start unit execution | Dashboard start requested; server confirmed accepting connections; one successful run, not a complete reboot/failure test |
+| 2026-11-21 04:02 | Read-only runtime and automation check | Server/client processes present with 10 GiB / 300-second ZGC settings; root daily update timer not installed; memory sampler disabled |

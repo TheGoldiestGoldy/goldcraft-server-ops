@@ -24,7 +24,7 @@ Live technical baseline, mod inventories, configurations, automation and evidenc
 | Minecraft | 1.21.1 |
 | Loader | Fabric |
 | Java | Temurin 21 |
-| Server mods | 85 active, 1 disabled |
+| Server mods | 82 JAR files: 81 parseable metadata records, 1 malformed metadata JAR; 1 separate disabled file |
 | Client mods | 102 detected |
 | Heap / GC | 4–12 GiB, 10 GiB soft maximum, Generational ZGC |
 | View / simulation distance | 8 / 5 chunks |
@@ -51,7 +51,7 @@ Download the current archives from the [player dashboard](https://goldcraft-host
 | [docs/change-timeline.md](docs/change-timeline.md) | Dated configuration and maintenance history |
 | [docs/operations.md](docs/operations.md) | Start, stop, LOD, pregeneration and recovery runbook |
 | [docs/security.md](docs/security.md) | Current exposure risks and hardening requirements |
-| [docs/issues](docs/issues) | LOD download-loop and rubberbanding investigations |
+| [docs/issues](docs/issues) | Host memory pressure, LOD download-loop and rubberbanding investigations |
 | [docs/experiments](docs/experiments) | Performance, LOD and world-maintenance results |
 | [inventory](inventory) | Exact mod names, versions, sizes and SHA-256 hashes |
 | [configs](configs) | Sanitized performance-relevant configuration snapshots |
@@ -75,6 +75,8 @@ Download the current archives from the [player dashboard](https://goldcraft-host
 - Automatic DH/VSS transfers previously created large queues and poor client playability.
 - Oversized pregeneration and high server view distance caused stalls and watchdog failures.
 - Rubberbanding with distant players still needs a controlled Spark comparison.
+- A 20 November host-memory incident triggered systemd-oomd to kill 233 processes in the PollyMC scope; cause and performance impact remain unisolated ([incident report](docs/issues/memory-pressure-2026-11-20.md)).
+- The daily 07:00 OS update timer is not installed. The server boot-start service is enabled and completed one observed start successfully, but update-and-reboot automation is not active ([operations runbook](docs/operations.md)).
 - Connection details are distributed through the community channel; defensive settings remain private.
 
 ## Evidence standard
