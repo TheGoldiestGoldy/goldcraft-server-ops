@@ -70,7 +70,7 @@ This is a newer **filesystem observation**, not a successful startup or player-l
 
 | Checked item | 16 Nov repository snapshot | 20 Nov local disk observation |
 |---|---|---|
-| Server mod JAR files | 85 inventoried entries | 82 `.jar` files |
+| Server mod JAR files | 82 JAR files: 81 parseable metadata entries, 1 malformed metadata JAR | 82 `.jar` files |
 | Disabled mod files | 1 disabled (README) | 1 `.disabled` file |
 | DH `synchronizeOnLoad` | false | false |
 | DH `enableRealTimeUpdates` | true | false |
@@ -84,9 +84,9 @@ This is a newer **filesystem observation**, not a successful startup or player-l
 | Region compression | lz4 | lz4 |
 | Synchronous chunk writes | false | false |
 
-**Important:** The changed DH rate limits and bandwidth configuration have not been validated for transfer behavior, memory use, TPS, MSPT, or client FPS. A configured global bandwidth limit of `0` must not be described as a proven effective unlimited rate without confirming the mod's semantics. No recommendation to deploy these settings is implied. The JAR count difference is an inventory discrepancy, not proof that three mods were deliberately removed or that the server can start successfully.
+**Important:** The changed DH rate limits and bandwidth configuration have not been validated for transfer behavior, memory use, TPS, MSPT, or client FPS. A configured global bandwidth limit of `0` must not be described as a proven effective unlimited rate without confirming the mod's semantics. No recommendation to deploy these settings is implied. The previous 85-row inventory was stale: three listed IDs (Moonlight Lib, PolyWeather and Region Discovery) are absent from the current folder. The remaining 81 parseable IDs, versions and hashes match; one additional JAR has malformed metadata. This establishes file-level absence, not deliberate removal or loader status.
 
-The locally inspected MTR 4.1.0-beta.2, Distant Horizons 3.3.3, and Voxy Server Side JAR SHA-256 hashes **match** their existing entries in [the server mod inventory](../inventory/server-mods.md). No binaries, raw logs, addresses, player data, or live configuration files were uploaded. A full sanitized mod inventory regeneration and controlled restart/performance validation remain outstanding.
+The locally inspected MTR 4.1.0-beta.2, Distant Horizons 3.3.3, and Voxy Server Side JAR SHA-256 hashes **match** their existing entries in [the server mod inventory](../inventory/server-mods.md). No binaries, raw logs, addresses, player data, or live configuration files were uploaded. The server inventory is now reconciled to 82 JAR files (81 parseable metadata entries and one malformed metadata JAR). Controlled restart/performance validation remains outstanding.
 
 
 ## Follow-up snapshot: 21 November 2026 (UTC)
