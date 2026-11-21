@@ -70,7 +70,7 @@ This is a newer **filesystem observation**, not a successful startup or player-l
 
 | Checked item | 16 Nov repository snapshot | 20 Nov local disk observation |
 |---|---|---|
-| Server mod JAR files | 85 inventoried entries | 82 `.jar` files |
+| Server mod JAR files | 82 JAR files: 81 parseable metadata entries, 1 malformed metadata JAR | 82 `.jar` files |
 | Disabled mod files | 1 disabled (README) | 1 `.disabled` file |
 | DH `synchronizeOnLoad` | false | false |
 | DH `enableRealTimeUpdates` | true | false |
@@ -84,6 +84,27 @@ This is a newer **filesystem observation**, not a successful startup or player-l
 | Region compression | lz4 | lz4 |
 | Synchronous chunk writes | false | false |
 
-**Important:** The changed DH rate limits and bandwidth configuration have not been validated for transfer behavior, memory use, TPS, MSPT, or client FPS. A configured global bandwidth limit of `0` must not be described as a proven effective unlimited rate without confirming the mod's semantics. No recommendation to deploy these settings is implied. The JAR count difference is an inventory discrepancy, not proof that three mods were deliberately removed or that the server can start successfully.
+**Important:** The changed DH rate limits and bandwidth configuration have not been validated for transfer behavior, memory use, TPS, MSPT, or client FPS. A configured global bandwidth limit of `0` must not be described as a proven effective unlimited rate without confirming the mod's semantics. No recommendation to deploy these settings is implied. The previous 85-row inventory was stale: three listed IDs (Moonlight Lib, PolyWeather and Region Discovery) are absent from the current folder. The remaining 81 parseable IDs, versions and hashes match; one additional JAR has malformed metadata. This establishes file-level absence, not deliberate removal or loader status.
 
-The locally inspected MTR 4.1.0-beta.2, Distant Horizons 3.3.3, and Voxy Server Side JAR SHA-256 hashes **match** their existing entries in [the server mod inventory](../inventory/server-mods.md). No binaries, raw logs, addresses, player data, or live configuration files were uploaded. A full sanitized mod inventory regeneration and controlled restart/performance validation remain outstanding.
+The locally inspected MTR 4.1.0-beta.2, Distant Horizons 3.3.3, and Voxy Server Side JAR SHA-256 hashes **match** their existing entries in [the server mod inventory](../inventory/server-mods.md). No binaries, raw logs, addresses, player data, or live configuration files were uploaded. The server inventory is now reconciled to 82 JAR files (81 parseable metadata entries and one malformed metadata JAR). Controlled restart/performance validation remains outstanding.
+
+
+## Follow-up snapshot: 21 November 2026 (UTC)
+
+### Server inventory reconciliation
+
+A read-only scan found **82 top-level server JAR files** and one separate disabled file. Of the JARs, **81 top-level Fabric metadata records parsed successfully**; one Feature Recycler JAR has a structurally valid ZIP container but malformed JSON in its fabric.mod.json description. Its loader activation is not established. The 81 parsed IDs, versions and SHA-256 hashes match the current inventory rows. Three old inventory rows are no longer present: Moonlight Lib, PolyWeather and Region Discovery. Their removal reason is unknown. See [server mod inventory](../inventory/server-mods.md).
+
+### Java and host memory snapshot
+
+At 04:02 UTC, the server and client Java processes were both present. The server launcher remained at 4 GiB initial / 12 GiB maximum heap, 10 GiB ZGC soft maximum and 300-second uncommit delay. The client remained at 2,000 MiB initial / 10,336 MiB maximum, with the same 10 GiB soft maximum and 300-second delay. Both live process arguments agreed with those persistent settings.
+
+That single host snapshot showed approximately 2.88 GiB MemAvailable, 12.21 GiB swap used, server RSS 10.46 GiB and client RSS 11.33 GiB. Memory PSI avg10/avg60/avg300 were all 0.00 at the sample instant. These are point-in-time values, not a capacity or stability benchmark. Server view/simulation distance remained 8/5.
+
+The brief 8 GiB soft-maximum / 60-second uncommit-delay experiment was not retained: persistent configuration and the 04:02 live processes were back at 10 GiB / 300 seconds. No controlled before/after test demonstrated an improvement. See [memory-pressure incident](issues/memory-pressure-2026-11-20.md).
+
+### Automation state
+
+The user-level server boot-start unit is enabled. Its 20 November run requested a start through the dashboard bridge and confirmed that the server accepted connections. This proves one successful run, not every reboot or failure mode.
+
+The separate root-owned daily OS update timer was **not installed** at 04:02 UTC on 21 November; systemd reported the unit as not found. The requested 07:00 update schedule must not be treated as active. The temporary memory sampler timer is disabled, and its PSS columns were zero in all 16 captured rows.

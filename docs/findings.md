@@ -115,3 +115,30 @@ The log collector counted more than one million ERROR-labelled lines across 160 
 - Whether DH real-time updates alone can run without forced bulk sync.
 - Actual client LOD transfer rate after the latest restore.
 - Which mod dominates two-player separated-region stalls.
+
+
+## Follow-up findings: 21 November 2026
+
+### Host memory-pressure incident
+
+**Status: Confirmed systemd-oomd action; cause not isolated.**
+
+At 14:24:39 UTC on 20 November, systemd-oomd marked the PollyMC application scope for termination. Its journal recorded 32,621,010,944 of 33,558,482,944 bytes of memory (97.21%) and 30,204,407,808 of 33,557,573,632 bytes of swap (90.01%). The scope then reported 233 processes killed. This confirms a host memory-pressure event and a process-scope kill; it does not establish that every killed process was Minecraft or isolate which application drove the pressure.
+
+A temporary server/client JVM trial lowered the ZGC soft maximum from 10 GiB to 8 GiB and the uncommit delay from 300 to 60 seconds. The persistent files were restored to 10 GiB / 300 seconds by 15:10 UTC. At 04:02 UTC on 21 November, both live Java processes again showed 10 GiB / 300 seconds. No controlled A/B test or TPS/MSPT/FPS measurement proves that the temporary settings helped. Full evidence and limitations are in [the incident report](issues/memory-pressure-2026-11-20.md).
+
+### Server mod inventory reconciliation
+
+**Status: Confirmed filesystem and hash audit; one JAR's load state unknown.**
+
+The current server folder contains 82 JAR files and one separate disabled file. Eighty-one JARs have parseable top-level Fabric metadata, and all 81 IDs, versions and SHA-256 hashes match the updated inventory. Three older rows (Moonlight Lib, PolyWeather and Region Discovery) are absent from the current folder; the reason is unknown. Feature Recycler's ZIP container passes integrity, but its metadata contains an unescaped line break in a JSON string. No matching entry was found in the current latest log, so the loader's treatment of that JAR is not established. Do not count it as a confirmed loaded mod.
+
+### OS update automation status
+
+**Status: Incomplete; daily updates are not active.**
+
+The user-level server boot-start unit is enabled and one run on 20 November completed successfully, requesting a dashboard start and confirming that the server accepted connections. The separate root-owned 07:00 OS update timer was not installed; systemd reported it as not found on 21 November. Draft host-side scripts were not installed or end-to-end tested and are not included in this public repository. Do not claim that daily OS updates or automatic post-update reboot/restart are operational.
+
+### Measurement limitations
+
+The temporary sampler recorded 16 one-minute observations, but every PSS value was zero, so it provides no usable PSS evidence. Its memory-used column was calculated as MemTotal minus MemAvailable, not a strict process-memory total. Three samples did not detect a client process. No TPS, MSPT, FPS, player-count or controlled gameplay measurements were collected. The sampler timer is disabled.
