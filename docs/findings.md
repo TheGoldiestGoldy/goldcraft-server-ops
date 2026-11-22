@@ -52,7 +52,7 @@ The dashboard bridge and daily inventory timer are enabled. The inventory job pu
 
 **Status: Confirmed**
 
-The active world contains a 5.01 GiB VSS/Voxy derived store. VSS serving is disabled, but the data is present. A separate 5.01 GiB restore artifact also exists under maintenance.
+The active world contains a 5.01 GiB VSS/Voxy derived store. The latest on-disk `config/vss-server-config.yaml` sets `service.enabled: true`, `generation.enabled: false`, and `storage.lod_store.enabled: true`; backfill is disabled. The server was not running at the 22 November audit, so runtime serving was not observed. A separate 5.01 GiB restore artifact also exists under maintenance.
 
 ## Confirmed failures or regressions
 
@@ -60,16 +60,23 @@ The active world contains a 5.01 GiB VSS/Voxy derived store. VSS serving is disa
 
 **Status: Confirmed symptom; mixed root cause**
 
-Players received large automatic LOD transfers that made normal play impractical. Disabling one in-game DH command did not reliably stop all observed activity because DH and VSS are independent systems and real-time DH updates remained enabled.
+Players received large automatic LOD transfers that made normal play impractical. Disabling one in-game DH command did not reliably stop all observed activity because DH and VSS are independent systems. Real-time DH updates were enabled during the earlier symptom period, but are disabled in the latest on-disk config.
 
-Current protective state:
+Latest on-disk configuration (22 November 2026; the server process was absent, so runtime state is unverified):
 
-- DH synchronizeOnLoad: false
-- DH request distance: 128 chunks
-- DH rate limits: 4 generation / 8 sync requests per second
-- DH per-player bandwidth: 2 MiB/s
-- VSS service: disabled
-- VSS store: preserved
+- DH `synchronizeOnLoad`: false
+- DH real-time updates: false
+- DH generation/sync request distances: 256 chunks
+- DH generation/sync rate limits: 20 / 50 requests per second
+- DH global bandwidth limit: 0 (the config comment says 0 disables the cap)
+- DH per-player bandwidth limit: 4096 KB/s
+- VSS `service.enabled`: true
+- VSS `generation.enabled`: false
+- VSS `storage.lod_store.enabled`: true
+- VSS backfill: disabled
+- VSS network limits: 25 MiB/s per player, 75 MiB/s global; queue limit 1024
+
+The previous statement that VSS serving was disabled was incorrect. The current file enables the service and LOD store, but no Java server process was running during the audit, so active serving was not observed. None of these settings has been validated for transfer behavior, queue growth, memory use, TPS, MSPT or client FPS.
 
 See [LOD download loop](issues/lod-download-loop.md).
 
@@ -112,7 +119,7 @@ The log collector counted more than one million ERROR-labelled lines across 160 
 - Maximum stable simultaneous player count.
 - Busy-city TPS and frame-time behavior at 5, 10 and 15 players.
 - Whether every retained legacy chunk is free of removed block IDs.
-- Whether DH real-time updates alone can run without forced bulk sync.
+- Whether the current DH/VSS on-disk settings can serve LODs without forced bulk queues or gameplay impact.
 - Actual client LOD transfer rate after the latest restore.
 - Which mod dominates two-player separated-region stalls.
 
