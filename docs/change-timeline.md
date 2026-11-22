@@ -35,6 +35,7 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 2026-11-16T22:44:29.546210+00:00 | config/DistantHorizons.toml.before-range-validation-20261116.bak | file | 0.0 MiB |
 | 2026-11-16T23:01:00.073403+00:00 | maintenance/vss-restore-audit-20261116 | directory | 5.9 MiB |
 | 2026-11-16T23:06:49.471740+00:00 | maintenance/vss-restore-20261116 | directory | 5131.8 MiB |
+| 2026-11-16T23:57:48.089487+00:00 | config/vss-server-config.yaml | file | 0.0 MiB |
 
 
 ## Operational events (UTC; 20–21 November 2026)
@@ -58,3 +59,4 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 2026-11-21 23:44:57 | Latest server log update | Ends with console-handler input/output exception; no explicit clean-stop marker; process-exit cause unknown |
 | 2026-11-22 00:02:05–00:02:19 | Daily client inventory service | Exited successfully; 100 client mods, 14 resource-pack entries (12 active), 2 shader packs; generated three profile archives |
 | 2026-11-22 04:04–04:05 | Read-only host audit | No Java server process present; no OOM event found in the inspected journal window; latest crash report dated 1 November |
+| 2026-11-22 04:33 | Read-only VSS/DH and client-archive recheck | VSS config enables service and LOD storage while generation/backfill are disabled; no Java server process; all three profile ZIPs pass CRC and SHA-256 checks; no runtime performance test |
