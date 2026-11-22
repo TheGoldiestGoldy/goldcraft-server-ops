@@ -25,21 +25,21 @@ Live technical baseline, mod inventories, configurations, automation and evidenc
 | Loader | Fabric |
 | Java | Temurin 21 |
 | Server mods | 82 JAR files: 81 parseable metadata records, 1 malformed metadata JAR; 1 separate disabled file |
-| Client mods | 102 detected |
+| Client mods | 100 detected; 100/100 Fabric metadata records parsed |
+| Client assets | 14 resource-pack entries (12 active), 2 shader packs |
 | Heap / GC | 4–12 GiB, 10 GiB soft maximum, Generational ZGC |
 | View / simulation distance | 8 / 5 chunks |
 | Capacity objective | 15 simultaneous players, not yet load-tested |
 
-## Available client profiles
+## Available generated client profiles
 
 | Profile | Intended hardware | Initial settings |
 |---|---|---|
-| Amethyst + Podium | Modern Android phone | 3 GB heap, 5/4 render/simulation, shader disabled |
-| Basic laptop | Older Intel i5, integrated or weak GPU, 8 GB RAM | 3 GB heap, 6/4 distance, shader disabled |
-| Balanced PC | i5/i7, 16 GB RAM, GTX 1060-class or 4–6 GB VRAM GPU | 6 GB heap, 8/5 distance, lightweight shader enabled |
-| Full desktop | Current operator client | Complete mod/resource-pack setup and Distant Horizons |
+| Amethyst + Podium | Modern Android phone | 3 GB heap, 5/4 render/simulation, shader off by default, 71 mods |
+| Basic 8 GB laptop | Older Intel i5, integrated or weak GPU, 8 GB RAM | 3 GB heap, 6/4 distance, shader off by default, 70 mods |
+| 16 GB / GTX 1060 class | i5/i7, 16 GB RAM, GTX 1060-class or 4–6 GB VRAM GPU | 6 GB heap, 8/5 distance, MakeUp Ultra Fast enabled, 70 mods |
 
-Download the current archives from the [player dashboard](https://goldcraft-host.tail26d0f0.ts.net/). They are rebuilt from the active client installation every 24 hours.
+The generator's 35–45 FPS figure is a starting target, not a measured benchmark. Its validation checks Fabric dependency resolution, not hardware performance. The full desktop setup remains the operator's active client, not a generated profile archive. See [the profile inventory](inventory/client-profiles.md).
 
 ## Repository map
 
@@ -51,7 +51,7 @@ Download the current archives from the [player dashboard](https://goldcraft-host
 | [docs/change-timeline.md](docs/change-timeline.md) | Dated configuration and maintenance history |
 | [docs/operations.md](docs/operations.md) | Start, stop, LOD, pregeneration and recovery runbook |
 | [docs/security.md](docs/security.md) | Current exposure risks and hardening requirements |
-| [docs/issues](docs/issues) | Host memory pressure, LOD download-loop and rubberbanding investigations |
+| [docs/issues](docs/issues) | Host memory pressure, server process exit, LOD download-loop and rubberbanding investigations |
 | [docs/experiments](docs/experiments) | Performance, LOD and world-maintenance results |
 | [inventory](inventory) | Exact mod names, versions, sizes and SHA-256 hashes |
 | [configs](configs) | Sanitized performance-relevant configuration snapshots |
@@ -60,13 +60,17 @@ Download the current archives from the [player dashboard](https://goldcraft-host
 
 ## Current conclusions
 
+- The client inventory refreshed successfully at 00:02 UTC on 22 November: 100 mods, 14 resource-pack entries (12 active), 2 shader packs and three checksum-verified profile archives.
+- At 04:05 UTC on 22 November, no Java server process was present. The latest server log ends with a console-input I/O exception; the reason for the process disappearance is unresolved ([investigation](docs/issues/server-process-exit-2026-11-21.md)).
+- The active `arch-update.timer` invokes `arch-update --check` only. It checks and notifies about updates; it does not install them. The separate 07:00 OS-upgrade timer remains uninstalled.
+
 ### Confirmed working
 
 - Fabric 1.21.1 starts reproducibly with the intended world and mod set.
 - The Linux launcher prevents duplicate processes and uses Java 21 with Generational ZGC.
 - A reviewed world trim preserved MTR data and passed a post-maintenance smoke test.
 - The Modern Furniture dedicated-server patch passed placement, save and restart validation.
-- Daily client inventories, performance profiles, checksums and resumable downloads are automated.
+- Daily client inventories, profile archive generation, dependency validation, checksums and resumable downloads are automated; FPS targets are not hardware benchmarks.
 - Existing VSS/Voxy-derived LOD data remains preserved for controlled future testing.
 
 ### Confirmed problems or unfinished tests

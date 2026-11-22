@@ -83,3 +83,15 @@ The temporary memory sampler is disabled. Its 16-row CSV reported zero PSS in ev
 The separate user-level server boot-start unit is enabled. Its 20 November execution requested a start through the dashboard bridge and confirmed that the server accepted connections. This is one successful observed run, not proof of all reboot, update-failure or recovery paths.
 
 Before enabling a daily updater, require a portable reviewed implementation, root-owned installed files, explicit package-manager failure handling, a graceful world-save stop, verified reboot detection, a successful boot-start test, and a failure-path test proving that the server is either restored or the blocker is reported. Keep this separate from the already-working daily inventory/profile automation.
+
+
+## Observed automation and server state (22 November 2026)
+
+- The daily client inventory timer is enabled and its 00:02 UTC run completed successfully. It regenerated the 100-mod inventory, client asset manifest and three profile archives. The inventory job's observed systemd memory peak was 2.9 GiB.
+- The boot-start helper is enabled and one invocation completed successfully on 21 November. It does not supervise the server continuously; at the 22 November 04:05 audit, no Java server process was present.
+- The enabled `arch-update.timer` runs `arch-update --check`, which checks and notifies but does not install packages. The separate root-owned 07:00 upgrade timer is not installed. Do not rely on unattended OS installation or reboot/restart.
+- The memory sampler timer is disabled because its prior PSS measurements were invalid.
+
+### Investigating an unexpected server disappearance
+
+A console-input `IOException` is not by itself proof of a Minecraft crash, clean stop or world corruption. Check the Java process, latest log, dashboard bridge journal, kernel/systemd-oomd events, last world-write times and backup status. Do not restart or perform maintenance against an uncertain world state solely because the console handler reported an input error. Keep raw logs, player identifiers and coordinates out of public reports. See [the 21 November process-exit investigation](issues/server-process-exit-2026-11-21.md).

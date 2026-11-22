@@ -1,6 +1,6 @@
 # Current state
 
-Snapshot generated: 2026-11-16T23:14:33.598396+00:00
+Historical baseline generated: 2026-11-16T23:14:33.598396+00:00
 
 ## Runtime and hardware
 
@@ -108,3 +108,63 @@ The brief 8 GiB soft-maximum / 60-second uncommit-delay experiment was not retai
 The user-level server boot-start unit is enabled. Its 20 November run requested a start through the dashboard bridge and confirmed that the server accepted connections. This proves one successful run, not every reboot or failure mode.
 
 The separate root-owned daily OS update timer was **not installed** at 04:02 UTC on 21 November; systemd reported the unit as not found. The requested 07:00 update schedule must not be treated as active. The temporary memory sampler timer is disabled, and its PSS columns were zero in all 16 captured rows.
+
+
+## Latest read-only observation: 22 November 2026, 04:05 UTC
+
+This is a filesystem and process snapshot, not a successful restart or gameplay test.
+
+### Server process state
+
+- No Java server process was present at the audit time. The dashboard control bridge remained active.
+- The latest server log was last modified at 23:44:57 UTC on 21 November. It records a successful startup completion at 22:56:15 UTC, followed later by a player disconnect and a server-console-handler `java.io.IOException: Input/output error`.
+- No clean shutdown marker was found in the latest log. The newest file in the crash-reports directory is dated 1 November. No OOM or systemd-oomd event was found in the host journal between 23:30 and 00:10 UTC on 21–22 November.
+- The cause of the process disappearance is **unknown**. The console-input exception is an observed event, not proof that it caused the exit. See [the investigation](issues/server-process-exit-2026-11-21.md).
+- The user-level boot-start unit is enabled and one invocation on 21 November completed after the bridge reported the server accepting connections. That one success does not establish persistent availability; the server was absent at this later audit.
+
+### Distant Horizons configuration on disk
+
+The file was modified at 22:56:10 UTC on 21 November. These are on-disk values; the server was not running to confirm their effective runtime state.
+
+| Setting | Current file value |
+|---|---:|
+| realTimeUpdateDistanceRadiusInChunks | 256 |
+| maxSyncOnLoadRequestDistance | 256 |
+| maxGenerationRequestDistance | 256 |
+| generationRequestRateLimit | 20 |
+| syncOnLoadRateLimit | 50 |
+| synchronizeOnLoad | false |
+| enableRealTimeUpdates | false |
+| globalBandwidthLimit | 0 (the config comment says 0 disables the limit) |
+| playerBandwidthLimit | 4096 KB/s |
+| numberOfThreads | 2 |
+
+Compared with the previously published config snapshot, the real-time radius and request distances are now 256; generation/sync request limits are 20/50; real-time updates are disabled; the global cap is disabled; and the per-player limit is 4096 KB/s. Transfer behavior, memory use, TPS, MSPT and client FPS have not been tested with this configuration. The sanitized snapshot is [configs/DistantHorizons.toml](../configs/DistantHorizons.toml).
+
+### Server mod inventory
+
+The server directory still contains 82 JAR files: 81 top-level Fabric metadata records parse, and one Feature Recycler JAR has malformed JSON metadata. One separate disabled file is present. This audit found no newer server-mod inventory change.
+
+### Client inventory and profile archives
+
+The daily inventory job completed successfully at 00:02:19 UTC on 22 November.
+
+- 100 client JARs; all 100 Fabric metadata records parsed.
+- The 00:02 inventory manifest's filenames and byte sizes match the files present during this audit.
+- 14 resource-pack entries, 12 active; 2 shader packs, one active.
+- Three generated profiles contain 71, 70 and 70 mods. Their archive sizes and SHA-256 hashes were recomputed and match the generated profile manifest.
+- systemd reported a 2.9 GiB peak for this one-shot inventory job. This is the job's observed peak, not server memory use.
+
+The profile generator's validation checks dependency resolution. Its 35–45 FPS target is not a hardware benchmark. See [client mod inventory](../inventory/client-mods.md), [client assets](../inventory/client-assets.md) and [generated profiles](../inventory/client-profiles.md).
+
+### Automation state
+
+- `goldcraft-inventory.timer` is enabled for a daily run and completed successfully at 00:02:19 UTC. Its next scheduled trigger was 00:01 UTC on 23 November, with up to five minutes of randomized delay.
+- `goldcraft-server-boot.service` is enabled and had one successful observed invocation at 16:45 UTC on 21 November. It is a one-shot start helper, not a continuously supervising service.
+- `arch-update.timer` is enabled, but its service runs `arch-update --check`. The installed command's help defines this as checking for available updates and sending a notification; it does not install packages.
+- The separate root-owned `goldcraft-daily-upgrade.timer` and service are absent from installed system and user unit paths. Draft source files exist locally but are not installed or end-to-end tested. Daily 07:00 OS installation/reboot automation is therefore **not active**.
+- The temporary memory-sampler timer remains disabled.
+
+### Host memory point-in-time
+
+At approximately 04:01 UTC, the host reported about 21 GiB available RAM and 10 GiB swap used. This is a single observation while the Minecraft server process was absent, not a capacity or performance benchmark. No TPS, MSPT or FPS measurements were collected.

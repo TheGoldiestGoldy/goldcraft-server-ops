@@ -1,26 +1,37 @@
-# Client assets and generated profiles
+# Client assets
 
-Active shader: ComplementaryUnbound_r5.9.3.zip
+Inventory generated: 2026-11-22T00:02:06+00:00.
+
+- Resource-pack entries: **14**, of which **12 active**.
+- Shader-pack entries: **2**.
+- Shaders enabled in the active client: **yes**.
+- Active shader: `ComplementaryUnbound_r5.9.3.zip`.
 
 ## Active resource packs
 
-- [MTR4.0.4] MP Moscow Monorail 1.0.zip
-- BVGPack v1.0 (MTR4).zip
-- CP3400-v1.2.0.zip
-- DEWON-N700__Kamome-4.0-MTR4.zip
-- DEWON-Shinkansen-Infra-1.9.zip
-- MetroLisboa V1.0.1.zip
-- Modular Tram Tracks.zip
-- Pretty Realistic v0.45 [32x] Free.zip
-- RET RSG3.zip
-- Swiss_Panorama_1996_MTR4_1.21.1.zip
-- Tramway infrastructure pack.zip
-- zoomono-mtr4.zip
+- `[MTR4.0.4] MP Moscow Monorail 1.0.zip`
+- `BVGPack v1.0 (MTR4).zip`
+- `CP3400-v1.2.0.zip`
+- `DEWON-N700__Kamome-4.0-MTR4.zip`
+- `DEWON-Shinkansen-Infra-1.9.zip`
+- `MetroLisboa V1.0.1.zip`
+- `Modular Tram Tracks.zip`
+- `RET RSG3.zip`
+- `RTX-Remix-Materials-0.61.0.zip`
+- `Swiss_Panorama_1996_MTR4_1.21.1.zip`
+- `Tramway infrastructure pack.zip`
+- `zoomono-mtr4.zip`
 
-## Generated client profiles
+## Present but inactive resource-pack entries
 
-| Profile | Mods | Size | Target | SHA-256 |
-|---|---:|---:|---|---|
-| Amethyst + Podium | 71 | 359.4 MiB | Modern Android phone, Java 21, 3–4 GB heap | 8f54ce69976086b9844297224e6bfa1b985b8c70ce7d53c11373aaf8114133c7 |
-| Basic 8 GB laptop | 70 | 359.4 MiB | Older Intel i5, integrated/old laptop GPU, 8 GB RAM | a62eabdf9735ddb7254f5dfb1219673fb6e88d835661882bcc7984e0b6142c76 |
-| 16 GB / GTX 1060 class | 70 | 359.4 MiB | i5/i7, 16 GB RAM, GTX 1060-class or 4–6 GB VRAM GPU | 616a40a9d8f2cca0c8874a1eacfc2876a53f0946ba52709e44a0a0f37abdf3f8 |
+- `DLR_B90_Stock_trains_04.zip`
+- `Pretty Realistic v0.45 [32x] Free.zip.disabled`
+
+## Shader packs
+
+- `ComplementaryUnbound_r5.9.3.zip` — active (0.5 MiB)
+- `rethinking-voxels_r0.1-beta9.zip` — inactive (7.9 MiB)
+
+The active client shader is Complementary Unbound r5.9.3. The profile generator separately refreshed MakeUp Ultra Fast 9.6a for the generated profile archives; that is not the active client shader.
+
+Generated hardware-targeted archives and their checksums are documented in [client profiles](client-profiles.md).

@@ -1,6 +1,6 @@
 # Findings: what worked and what did not
 
-Snapshot date: 16 November 2026.
+Baseline snapshot date: 16 November 2026; follow-up findings through 22 November 2026.
 
 ## Confirmed successes
 
@@ -142,3 +142,34 @@ The user-level server boot-start unit is enabled and one run on 20 November comp
 ### Measurement limitations
 
 The temporary sampler recorded 16 one-minute observations, but every PSS value was zero, so it provides no usable PSS evidence. Its memory-used column was calculated as MemTotal minus MemAvailable, not a strict process-memory total. Three samples did not detect a client process. No TPS, MSPT, FPS, player-count or controlled gameplay measurements were collected. The sampler timer is disabled.
+
+
+## Follow-up findings: 22 November 2026
+
+### Server process disappearance
+
+**Status: Confirmed process absence and console-input exception; cause unknown.**
+
+At 04:05 UTC on 22 November, no Java server process was present. The latest server log was last modified at 23:44:57 UTC on 21 November and ended with a console-handler `java.io.IOException: Input/output error` after a player disconnect. The log contains no explicit clean-stop marker. The newest crash-report file is dated 1 November, and no OOM/systemd-oomd event was found in the host journal window 23:30–00:10 UTC. The dashboard bridge remained active. None of this establishes why the server process disappeared or whether the console exception caused it. See [the focused investigation](issues/server-process-exit-2026-11-21.md).
+
+### Distant Horizons configuration drift
+
+**Status: Confirmed on-disk change; runtime behavior untested.**
+
+The 21 November 22:56 UTC config file has a real-time update radius and maximum generation/sync request distances of 256 chunks, generation/sync rate limits of 20/50, real-time updates disabled, global bandwidth limit set to 0 (the config comment defines 0 as disabling the cap), and a per-player limit of 4096 KB/s. The server was not running at the 22 November audit, so effective runtime state and transfer behavior are unknown. No performance recommendation is implied.
+
+### Daily client inventory and profile generation
+
+**Status: Confirmed successful one-shot job and verified artifacts.**
+
+The daily inventory service exited successfully at 00:02:19 UTC. Its manifest lists 100 client JARs, 14 resource-pack entries (12 active) and 2 shader packs. A subsequent read-only audit confirmed all 100 metadata records parse and the manifest filenames and byte sizes match the active client directory. The three profile archives contain 71/70/70 mods; recomputed archive sizes and SHA-256 values match the profile manifest. systemd reported a 2.9 GiB peak for the inventory job. The profile script's validation is a dependency-resolution check; the advertised 35–45 FPS is a starting target, not measured performance.
+
+### OS update automation
+
+**Status: Update checks active; unattended installation not active.**
+
+The user-level `arch-update.timer` is enabled, but its service invokes `arch-update --check`. The command help says this checks for updates and sends a notification; it does not install packages. The separate root-owned 07:00 upgrade timer and service are absent from installed systemd paths. Draft source files remain local and uninstalled. Do not claim unattended OS installation, reboot or automatic server recovery is operational.
+
+### Measurement limitations
+
+No TPS, MSPT, FPS, player-count, or controlled gameplay measurement was collected in this audit. The current DH values have not been validated against transfer queues, server tick time, memory or client frame pacing.
