@@ -34,6 +34,8 @@ The dashboard bridge sends stop to a process it owns. For an externally started 
 
 Normal play should keep VSS serving disabled and DH synchronizeOnLoad disabled until a deliberate test is planned.
 
+**Current on-disk warning (22 November 2026):** `config/vss-server-config.yaml` sets `service.enabled: true` and `storage.lod_store.enabled: true`, while generation and backfill are disabled. The latest audit found no Java server process, so runtime serving was not observed. Do not assume VSS is disabled when the server starts; verify the intended config before restarting or running an LOD test. The sanitized snapshot is `configs/vss-server-config.yaml`.
+
 Do not delete world/vss-lod merely to stop transfers. The store is derived data and can be disabled without deleting it.
 
 Before changing LOD settings:
@@ -88,9 +90,10 @@ Before enabling a daily updater, require a portable reviewed implementation, roo
 ## Observed automation and server state (22 November 2026)
 
 - The daily client inventory timer is enabled and its 00:02 UTC run completed successfully. It regenerated the 100-mod inventory, client asset manifest and three profile archives. The inventory job's observed systemd memory peak was 2.9 GiB.
-- The boot-start helper is enabled and one invocation completed successfully on 21 November. It does not supervise the server continuously; at the 22 November 04:05 audit, no Java server process was present.
+- The boot-start helper is enabled and one invocation completed successfully on 21 November. It does not supervise the server continuously; at the 22 November 04:33 audit, no Java server process was present.
 - The enabled `arch-update.timer` runs `arch-update --check`, which checks and notifies but does not install packages. The separate root-owned 07:00 upgrade timer is not installed. Do not rely on unattended OS installation or reboot/restart.
 - The memory sampler timer is disabled because its prior PSS measurements were invalid.
+- The current VSS config enables service and LOD storage on disk, with generation/backfill disabled; actual serving is unverified because no Java server process was present at 04:33 UTC.
 
 ### Investigating an unexpected server disappearance
 
