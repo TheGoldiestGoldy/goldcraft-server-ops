@@ -156,7 +156,7 @@ The current `config/vss-server-config.yaml` was last modified at 23:57:48 UTC on
 
 ### Server mod inventory
 
-The server directory still contains 82 JAR files: 81 top-level Fabric metadata records parse, and one Feature Recycler JAR has malformed JSON metadata. One separate disabled file is present. No server-mod inventory change was found.
+The server directory contains 82 JAR files: 81 parseable metadata records and one malformed Feature Recycler JAR; one separate disabled file is present. The published server CSV previously contained 85 rows; three entries for absent files (Moonlight Lib, PolyWeather, Region Discovery) were removed, leaving 82 rows matching the on-disk JAR filenames, sizes and SHA-256 values. All 81 parseable IDs, versions and hashes match; Feature Recycler's ID/version remain unverified.
 
 ### Client inventory and profile archives
 
