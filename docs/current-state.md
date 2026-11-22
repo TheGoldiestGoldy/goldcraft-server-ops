@@ -156,7 +156,7 @@ The current `config/vss-server-config.yaml` was last modified at 23:57:48 UTC on
 
 ### Server mod inventory
 
-The server directory contains 82 JAR files: 81 parseable metadata records and one malformed Feature Recycler JAR; one separate disabled file is present. The published server CSV previously contained 85 rows; three entries for absent files (Moonlight Lib, PolyWeather, Region Discovery) were removed, leaving 82 rows matching the on-disk JAR filenames, sizes and SHA-256 values. All 81 parseable IDs, versions and hashes match; Feature Recycler's ID/version remain unverified.
+The server directory contains 82 JAR files: 81 parseable metadata records and one malformed Feature Recycler JAR; one separate disabled file is present. At 04:47 UTC the published server CSV was reconciled from 85 to 82 rows by removing three entries for absent files (Moonlight Lib, PolyWeather, Region Discovery). The remaining 82 rows match the on-disk JAR filenames, sizes and SHA-256 values. All 81 parseable IDs, versions and hashes match; Feature Recycler's ID/version remain unverified.
 
 ### Client inventory and profile archives
 
