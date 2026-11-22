@@ -2,7 +2,7 @@
 
 ## 1. Check server status
 
-Open the [Goldcraft player dashboard](https://goldcraft-host.tail26d0f0.ts.net/). It shows whether the server PC and Minecraft server are online.
+Open the private Goldcraft player-dashboard link shared in the community channel. It shows whether the server PC and Minecraft server are online.
 
 ## 2. Choose a client package
 

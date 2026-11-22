@@ -4,7 +4,7 @@ Live technical baseline, mod inventories, configurations, automation and evidenc
 
 ## Start here
 
-- [Live server status and client downloads](https://goldcraft-host.tail26d0f0.ts.net/)
+- Live server status and client downloads are shared through the private community channel; the endpoint is intentionally omitted from this public repository.
 - [Joining and client setup](docs/joining.md)
 - [Current server state](docs/current-state.md)
 - [What worked and what failed](docs/findings.md)
@@ -39,7 +39,7 @@ Live technical baseline, mod inventories, configurations, automation and evidenc
 | Balanced PC | i5/i7, 16 GB RAM, GTX 1060-class or 4–6 GB VRAM GPU | 6 GB heap, 8/5 distance, lightweight shader enabled |
 | Full desktop | Current operator client | Complete mod/resource-pack setup and Distant Horizons |
 
-Download the current archives from the [player dashboard](https://goldcraft-host.tail26d0f0.ts.net/). They are rebuilt from the active client installation every 24 hours.
+The current client archives are available through the private player dashboard; its URL is shared in the community channel. Archives are rebuilt from the active client installation every 24 hours.
 
 ## Repository map
 
