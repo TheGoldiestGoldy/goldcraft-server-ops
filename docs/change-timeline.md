@@ -54,7 +54,7 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | Time | Event | Verified result / limitation |
 |---|---|---|
 | 2026-11-21 16:45:10 | User-level server boot-start unit | Bridge reported that Minecraft was accepting connections; one successful invocation only |
-| 2026-11-21 22:56:10 | Distant Horizons config file modified | Real-time radius and maximum generation/sync request distances are now 256; rate limits and bandwidth settings also differ from the earlier public config snapshot. No performance test |
+| 2026-11-21 22:56:10 | Distant Horizons config file modified | Real-time radius and maximum generation/sync request distances are now 256; rate limits and bandwidth settings also differ from the earlier public config snapshot; `generatorPlan` is `DISABLED` (no distant terrain generated). No performance test |
 | 2026-11-21 23:44:57 | Latest server log update | Ends with console-handler input/output exception; no explicit clean-stop marker; process-exit cause unknown |
 | 2026-11-22 00:02:05–00:02:19 | Daily client inventory service | Exited successfully; 100 client mods, 14 resource-pack entries (12 active), 2 shader packs; generated three profile archives |
 | 2026-11-22 04:04–04:05 | Read-only host audit | No Java server process present; no OOM event found in the inspected journal window; latest crash report dated 1 November |

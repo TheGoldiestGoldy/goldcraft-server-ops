@@ -52,6 +52,7 @@ Historical baseline generated: 2026-11-16T23:14:33.598396+00:00
 | playerBandwidthLimit | 2048 |
 | enableAdaptiveTransferSpeed | true |
 | numberOfThreads | 2 |
+| generatorPlan | DISABLED (config comment: no distant terrain will be generated) |
 | generatorPlan | SURFACE_THEN_CHUNKS |
 | chunkGeneratorMode | FEATURES |
 | rendererMode | DEFAULT |
@@ -139,7 +140,7 @@ The file was modified at 22:56:10 UTC on 21 November. These are on-disk values; 
 | playerBandwidthLimit | 4096 KB/s |
 | numberOfThreads | 2 |
 
-Compared with the previously published config snapshot, the real-time radius and request distances are now 256; generation/sync request limits are 20/50; real-time updates are disabled; the global cap is disabled; and the per-player limit is 4096 KB/s. Transfer behavior, memory use, TPS, MSPT and client FPS have not been tested with this configuration. The sanitized snapshot is [configs/DistantHorizons.toml](../configs/DistantHorizons.toml).
+Compared with the previously published config snapshot, the real-time radius and request distances are now 256; generation/sync request limits are 20/50; real-time updates are disabled; the global cap is disabled; and the per-player limit is 4096 KB/s, and `generatorPlan` is `DISABLED` (the config comment says no distant terrain will be generated). Transfer behavior, memory use, TPS, MSPT and client FPS have not been tested with this configuration. The sanitized snapshot is [configs/DistantHorizons.toml](../configs/DistantHorizons.toml).
 
 ### Server mod inventory
 

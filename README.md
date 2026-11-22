@@ -59,6 +59,7 @@ The generator's 35–45 FPS figure is a starting target, not a measured benchmar
 | [tools](tools) | Snapshot, report, backup verification and maintenance utilities |
 
 ## Current conclusions
+- The current Distant Horizons server config sets `generatorPlan` to `DISABLED`; its own comment says no distant terrain will be generated. This is an on-disk setting, not a live runtime test.
 
 - The client inventory refreshed successfully at 00:02 UTC on 22 November: 100 mods, 14 resource-pack entries (12 active), 2 shader packs and three checksum-verified profile archives.
 - At 04:05 UTC on 22 November, no Java server process was present. The latest server log ends with a console-input I/O exception; the reason for the process disappearance is unresolved ([investigation](docs/issues/server-process-exit-2026-11-21.md)).

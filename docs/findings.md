@@ -156,7 +156,7 @@ At 04:05 UTC on 22 November, no Java server process was present. The latest serv
 
 **Status: Confirmed on-disk change; runtime behavior untested.**
 
-The 21 November 22:56 UTC config file has a real-time update radius and maximum generation/sync request distances of 256 chunks, generation/sync rate limits of 20/50, real-time updates disabled, global bandwidth limit set to 0 (the config comment defines 0 as disabling the cap), and a per-player limit of 4096 KB/s. The server was not running at the 22 November audit, so effective runtime state and transfer behavior are unknown. No performance recommendation is implied.
+The 21 November 22:56 UTC config file has a real-time update radius and maximum generation/sync request distances of 256 chunks, generation/sync rate limits of 20/50, real-time updates disabled, global bandwidth limit set to 0 (the config comment defines 0 as disabling the cap), and a per-player limit of 4096 KB/s. The same config sets `generatorPlan = DISABLED`; its comment states that no distant terrain will be generated. The server was not running at the 22 November audit, so effective runtime state and transfer behavior are unknown. No performance recommendation is implied.
 
 ### Daily client inventory and profile generation
 
