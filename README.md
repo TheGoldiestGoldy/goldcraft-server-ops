@@ -4,7 +4,7 @@ Live technical baseline, mod inventories, configurations, automation and evidenc
 
 ## Start here
 
-- [Live server status and client downloads](https://goldcraft-host.tail26d0f0.ts.net/)
+- Live server status and client downloads are shared through the private community channel; the endpoint is intentionally omitted from this public repository.
 - [Joining and client setup](docs/joining.md)
 - [Current server state](docs/current-state.md)
 - [What worked and what failed](docs/findings.md)
