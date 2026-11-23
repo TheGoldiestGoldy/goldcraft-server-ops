@@ -223,3 +223,14 @@ The daily inventory job completed successfully at 00:02:49 UTC on 23 November. T
 ### Measurement limitations
 
 The server process and VSS service initialization are confirmed, but no client LOD transfer, queue-depth, Spark, TPS, MSPT, FPS or multi-player capacity measurement was collected. The 35-45 FPS profile figure remains a target, not a benchmark.
+
+
+### Live protocol and memory snapshot (23 November 2026, 05:03 UTC)
+
+**Status: confirmed status response and point-in-time process accounting; tick health and performance remain unknown.**
+
+A loopback status-protocol request returned Minecraft 1.21.1 (protocol 767), with 0/20 players online. The Java process had been present for about 2 h 52 min. /proc reported 10.09 GiB RSS, 10.08 GiB PSS and 0.24 GiB process swap. Host MemAvailable was 9.24 GiB and zram usage was 7.27 GiB. Memory PSI avg10, avg60 and avg300 were 0.00 for both some and full pressure at the sample. This is one point in time and cannot establish stability under load.
+
+A fresh SHA-256 comparison against the published CSVs matched all 82 server JARs and all 100 client JARs by filename, byte size and hash. Server metadata remains 81/82 parseable because Feature Recycler's metadata JSON is malformed; all 82 server ZIP archives passed integrity checking. Client metadata remains 100/100 parseable.
+
+The latest server latest.log modification time was still 02:13:05 UTC. The status response does not establish continued tick or log activity. No client login, Spark profile, TPS, MSPT, FPS, player-capacity, or LOD-transfer test was performed.
