@@ -230,3 +230,12 @@ The server process had been present for approximately 2 h 52 min. Its point-in-t
 At 05:03 UTC, a fresh filename/byte-size/SHA-256 comparison against this branch's published inventories found an exact match: **82/82 server JARs** and **100/100 client JARs**. Server metadata still parses for 81/82 JARs; Feature Recycler remains the single malformed fabric.mod.json entry, while all server ZIP archives passed integrity checks. Client metadata parses for 100/100 JARs.
 
 The latest server latest.log modification time remained 02:13:05 UTC. The successful status ping therefore must not be treated as evidence of continued log activity or healthy ticking. No Spark profile, TPS, MSPT, FPS, player-load, or client-transfer measurement was collected.
+
+
+## Runtime follow-up (23 November 2026, 05:13 UTC)
+
+A second read-only status request again returned Minecraft 1.21.1 / protocol 767 and 0/20 players. The process had been present for approximately 3 h 01 min. At least 11 world data files had modification times within the preceding five minutes, and the server GC log advanced at 05:12:48 UTC. The latest.log file remained unchanged since 02:13:05 UTC. World-save and GC-log writes indicate ongoing runtime activity, but they do not establish healthy tick timing.
+
+The 05:13 process snapshot reported **10.46 GiB RSS**, **10.45 GiB PSS**, and **0.23 GiB process swap**. Host MemAvailable was **8.91 GiB**, zram usage **7.28 GiB**, and memory PSI avg10/avg60/avg300 remained **0.00** for both some and full pressure. Compared with the 05:03 sample, PSS increased from 10.08 to 10.45 GiB and MemAvailable fell from 9.24 to 8.91 GiB, while zram usage was effectively unchanged. Two samples do not establish a leak or sustained trend. No systemd-oomd kill/pressure action or kernel OOM kill was found in the post-boot journal window.
+
+Spark's backgroundProfiler setting is enabled. A temporary JFR profile file was open by the server process and grew during the observation window. A read-only copy could not be parsed because it lacked a completed metadata event; attach-based JFR inspection also failed to connect within 10.5 seconds. No profile metrics were extracted and the live recording was not stopped or modified.
