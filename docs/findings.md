@@ -234,3 +234,14 @@ A loopback status-protocol request returned Minecraft 1.21.1 (protocol 767), wit
 A fresh SHA-256 comparison against the published CSVs matched all 82 server JARs and all 100 client JARs by filename, byte size and hash. Server metadata remains 81/82 parseable because Feature Recycler's metadata JSON is malformed; all 82 server ZIP archives passed integrity checking. Client metadata remains 100/100 parseable.
 
 The latest server latest.log modification time was still 02:13:05 UTC. The status response does not establish continued tick or log activity. No client login, Spark profile, TPS, MSPT, FPS, player-capacity, or LOD-transfer test was performed.
+
+
+### Runtime writes and Spark background recording (23 November 2026, 05:13 UTC)
+
+**Status: confirmed world-save/GC write activity and an open Spark JFR temporary file; performance interpretation unavailable.**
+
+A second loopback status request returned Minecraft 1.21.1 / protocol 767, 0/20 players. At least 11 world data files had changed within the preceding five minutes, and the server GC log advanced at 05:12:48 UTC. The latest.log file remained unchanged since 02:13:05 UTC. These file timestamps support ongoing save/GC activity, but do not establish tick health or player-visible responsiveness.
+
+Spark's backgroundProfiler setting is true. A temporary JFR profile file was open by the server process and grew during the observation window. A read-only copy could not be parsed because no completed metadata event was present; attach-based JFR inspection did not connect within 10.5 seconds. The recording was left untouched, and no JFR metrics are claimed.
+
+Between the 05:03 and 05:13 point-in-time samples, process PSS rose from 10.08 to 10.45 GiB, host MemAvailable fell from 9.24 to 8.91 GiB, and zram usage stayed near 7.27–7.28 GiB. Memory PSI averages remained 0.00 and no systemd-oomd action or kernel OOM kill was found after the 02:12 boot. Two samples cannot establish a memory leak or sustained pressure. No TPS, MSPT, FPS, player-load or LOD-transfer benchmark was collected.
