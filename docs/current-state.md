@@ -219,3 +219,14 @@ This observation follows a host reboot. It is a read-only audit; no server, worl
 - arch-update.timer remains a check/notification task (arch-update --check); the root daily-upgrade unit is absent.
 - goldcraft-memory-sampler.timer remains disabled because the previous PSS values were invalid.
 - No TPS, MSPT, FPS, Spark profile, player-capacity, LOD queue, or client transfer benchmark was collected.
+
+
+## Live status and memory snapshot (23 November 2026, 05:03 UTC)
+
+A read-only Minecraft status-protocol request to loopback returned version **1.21.1**, protocol **767**, with **0 of 20** player slots occupied. This confirms that the status endpoint answered at the time of the request; it does not prove world-tick health, a successful client login, gameplay, TPS/MSPT, or LOD delivery.
+
+The server process had been present for approximately 2 h 52 min. Its point-in-time /proc accounting reported **10.09 GiB RSS**, **10.08 GiB PSS**, and **0.24 GiB process swap**. Host MemAvailable was **9.24 GiB**; zram swap usage was **7.27 GiB**. Memory PSI avg10, avg60, and avg300 were all **0.00** for both some and full pressure at the sample. These are one-time observations, not a capacity or performance benchmark.
+
+At 05:03 UTC, a fresh filename/byte-size/SHA-256 comparison against this branch's published inventories found an exact match: **82/82 server JARs** and **100/100 client JARs**. Server metadata still parses for 81/82 JARs; Feature Recycler remains the single malformed fabric.mod.json entry, while all server ZIP archives passed integrity checks. Client metadata parses for 100/100 JARs.
+
+The latest server latest.log modification time remained 02:13:05 UTC. The successful status ping therefore must not be treated as evidence of continued log activity or healthy ticking. No Spark profile, TPS, MSPT, FPS, player-load, or client-transfer measurement was collected.
