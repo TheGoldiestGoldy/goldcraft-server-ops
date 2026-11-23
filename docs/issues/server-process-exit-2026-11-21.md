@@ -24,3 +24,10 @@ The console-input exception is an observed event. It does **not** establish that
 4. Before any future restart or maintenance, confirm the latest world save and backup state.
 
 No production process, world or configuration was changed during this audit. Raw logs, player identifiers, addresses and coordinates are intentionally not reproduced here.
+
+
+## Follow-up observation: 23 November 2026
+
+The host boot timestamp is 02:12:07 UTC. The enabled user-level boot helper ran at 02:12:17, requested the Minecraft start at 02:12:18, and reported the server accepting connections at 02:12:42. At 04:35:24 UTC the Java process was still present and the configured game listener was present.
+
+This confirms a later successful post-boot start and continued process presence during the audit. It does not identify why the earlier process disappeared on 21 November, prove the console-input exception was causal, or certify all restart/failure paths. The original process-exit cause remains unresolved. No world, production process or live setting was changed during this follow-up.

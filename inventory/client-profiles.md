@@ -1,12 +1,12 @@
 # Generated client profiles
 
-Generated: 2026-11-22T00:02:13+00:00. All three archive sizes and SHA-256 values below were independently recomputed from the generated files during the 22 November audit and matched the profile manifest.
+Generated: 2026-11-23T00:02:13+00:00. All three archive sizes and SHA-256 values below were independently recomputed from the generated files during the 23 November audit, matched the profile manifest, and passed ZIP CRC validation with no bad members.
 
 | Profile | Target hardware | Recommended heap | Render / simulation | Mods | Shader default | Archive | Size | SHA-256 |
 |---|---|---:|---:|---:|---:|---|---:|---|
-| Amethyst + Podium | Modern Android phone, Java 21, 3–4 GB heap | 3 GiB | 5/4 | 71 | included, off by default | `goldcraft-profile-mobile-amethyst.zip` | 383,855,165 bytes (366.1 MiB) | `50ba6eb8cd6fdadf34e41adf0407420fbaf7cc79f1731ee60f6b37e77737478b` |
-| Basic 8 GB laptop | Older Intel i5, integrated/old laptop GPU, 8 GB RAM | 3 GiB | 6/4 | 70 | included, off by default | `goldcraft-profile-basic-laptop.zip` | 383,837,123 bytes (366.1 MiB) | `3d36b38d912df36e409a71df02b8e1d2fbe7e018903a2c08c48d4fa450602205` |
-| 16 GB / GTX 1060 class | i5/i7, 16 GB RAM, GTX 1060-class or 4–6 GB VRAM GPU | 6 GiB | 8/5 | 70 | enabled | `goldcraft-profile-nice-laptop.zip` | 383,837,181 bytes (366.1 MiB) | `20a62ef99733c1047fd3c21a16a8ece0330dc659e0197443fbf89db597106aeb` |
+| Amethyst + Podium | Modern Android phone, Java 21, 3–4 GB heap | 3 GiB | 5/4 | 71 | included, off by default | `goldcraft-profile-mobile-amethyst.zip` | 383,855,165 bytes (366.1 MiB) | `f6cc28c3784eb8106dc99756ec16ef6cafb37b8f7cee53d53cb45ec61458fcce` |
+| Basic 8 GB laptop | Older Intel i5, integrated/old laptop GPU, 8 GB RAM | 3 GiB | 6/4 | 70 | included, off by default | `goldcraft-profile-basic-laptop.zip` | 383,837,123 bytes (366.1 MiB) | `d3797d3c3e64d42b9e769ced98d81252c7198976281d94d56c768790178c3914` |
+| 16 GB / GTX 1060 class | i5/i7, 16 GB RAM, GTX 1060-class or 4–6 GB VRAM GPU | 6 GiB | 8/5 | 70 | enabled | `goldcraft-profile-nice-laptop.zip` | 383,837,181 bytes (366.1 MiB) | `c7a385c44c5bb0d7a2e5f4c6e408f8fc5c0fd12ed66782b7a8b6b7a3d4129a17` |
 
 ## Validation meaning
 

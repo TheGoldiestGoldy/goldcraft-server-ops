@@ -1,6 +1,6 @@
 # Findings: what worked and what did not
 
-Baseline snapshot date: 16 November 2026; follow-up findings through 22 November 2026.
+Baseline snapshot date: 16 November 2026; follow-up findings through 23 November 2026.
 
 ## Confirmed successes
 
@@ -180,3 +180,46 @@ The user-level `arch-update.timer` is enabled, but its service invokes `arch-upd
 ### Measurement limitations
 
 No TPS, MSPT, FPS, player-count, or controlled gameplay measurement was collected in this audit. The current DH values have not been validated against transfer queues, server tick time, memory or client frame pacing.
+
+
+## Follow-up findings: 23 November 2026
+
+### Post-boot server start
+
+**Status: Confirmed single post-boot start and continued process presence; recovery coverage remains limited.**
+
+The host booted at 02:12:07 UTC. The enabled user-level boot helper ran at 02:12:17, requested the server start at 02:12:18, and the bridge reported Minecraft accepting connections at 02:12:42. The Java process and configured game listener were still present at 04:35:24 UTC. This is a second successful observed boot-start after the 21 November invocation. It does not explain the earlier 21 November process disappearance, prove continuous supervision, or validate an unattended package-update/reboot workflow. See [the process-exit investigation](issues/server-process-exit-2026-11-21.md).
+
+### VSS runtime initialization
+
+**Status: Confirmed service/store initialization; client delivery and performance unknown.**
+
+The 23 November startup log records the VSS LOD request-processing service starting at 02:12:46 UTC and the LOD store becoming active at 02:12:48 UTC. The server config enables the service and LOD store while generation and backfill are disabled. This confirms runtime initialization for serving existing stored LOD data, not that any client requested or received bytes. No transfer counters, queue depth, TPS, MSPT or FPS were measured.
+
+### SeedGen and Distant Horizons startup ambiguity
+
+**Status: Confirmed configuration/log discrepancy; behavior unresolved.**
+
+The installed server JARs identify Distant Horizons 3.3.3 and SeedGen 0.9.1. SeedGen reports that RetrievalQueueDepthMixin and SchedulerPriorityMixin were skipped because the DH method/constant signatures differ in this build. The SeedGen config has enabled=true and serverGeneration=false; the DH config has generatorPlan=DISABLED, whose comment says no distant terrain will be generated. However, the same startup log emits four "now generating LODs" messages and says distant terrain is full detail because the DH plan asks for it. It also references enableDistantGeneration, a key absent from the current DH config. These messages are not enough to establish that SeedGen is generating or serving LODs to clients. Do not infer a working or disabled generation path from one line; see [the LOD investigation](issues/lod-download-loop.md).
+
+### Client/server LOD configuration drift
+
+**Status: Confirmed on-disk differences; effective multiplayer settings unknown.**
+
+The configured PollyMC client DH file has synchronizeOnLoad=true, enableRealTimeUpdates=true, maxSyncOnLoadRequestDistance=384, syncOnLoadRateLimit=80 and generatorPlan=SURFACE_THEN_CHUNKS. The server file has synchronizeOnLoad=false, enableRealTimeUpdates=false, maxSyncOnLoadRequestDistance=256, syncOnLoadRateLimit=50 and generatorPlan=DISABLED. The client VSS file has LOD receive enabled and distance_chunks=96. No local client Java process or client-side handshake was captured, so the effective values after server configuration/handshake are unknown. Sanitized excerpts are published under configs/.
+
+### Startup warning burst
+
+**Status: Confirmed log counts; cause and impact unknown.**
+
+The latest startup log contains 3,000 occurrences of the PostProcessing warning pattern and five Seed Renderer "could not grow" warnings. The log also contains two SeedGen mixin compatibility warnings. No controlled test links these messages to tick stalls, world damage, or player-visible behavior. Raw logs, block coordinates and world identifiers are not published.
+
+### Daily inventory and profile generation
+
+**Status: Confirmed successful job and verified artifacts.**
+
+The daily inventory job completed successfully at 00:02:49 UTC on 23 November. The configured client source contains 100 JARs with 100 parseable Fabric metadata records; the published client CSV and server CSV both match the current local filename, byte-size and SHA-256 row sets (100/100 and 82/82). The job recorded 14 resource-pack entries (12 active), two shader packs and three profiles with 71/70/70 mods. The three current profile archives match the generated manifest hashes and pass ZIP CRC checks.
+
+### Measurement limitations
+
+The server process and VSS service initialization are confirmed, but no client LOD transfer, queue-depth, Spark, TPS, MSPT, FPS or multi-player capacity measurement was collected. The 35-45 FPS profile figure remains a target, not a benchmark.

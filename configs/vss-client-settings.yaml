@@ -1,0 +1,32 @@
+# Selected sanitized settings from the configured PollyMC client.
+# This is an excerpt, not a drop-in replacement. Far-player/name-tag sharing
+# and identity-bearing fields are intentionally omitted.
+config_version: 1
+lod:
+  receive: true
+  distance_chunks: 96
+  download:
+    max_columns_per_second: 0
+    adaptive_rate: true
+    slow_start_on_join: true
+    ingest_backpressure: true
+scan:
+  region_order: true
+  adaptive_cadence: true
+  retain_completed_prefix: true
+  quadtree: true
+  region_summaries: true
+cache:
+  split_by_world: true
+compatibility:
+  protocols:
+    v16: true
+    v19: true
+  v16_generation: true
+  block_fallbacks:
+    default: "minecraft:stone"
+    overrides: {}
+integrations:
+  map_ingestion:
+    enabled: false
+    backpressure: true

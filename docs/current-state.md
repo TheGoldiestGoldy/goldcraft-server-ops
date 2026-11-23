@@ -181,3 +181,41 @@ The profile generator's validation checks dependency resolution. Its 35–45 FPS
 ### Host memory point-in-time
 
 At approximately 04:01 UTC, the host reported about 21 GiB available RAM and 10 GiB swap used. This is a single observation while the Minecraft server process was absent, not a capacity or performance benchmark. No TPS, MSPT or FPS measurements were collected.
+
+
+## Latest read-only observation: 23 November 2026, 04:35 UTC
+
+This observation follows a host reboot. It is a read-only audit; no server, world, client, or configuration changes were made.
+
+### Server runtime and post-boot start
+
+- Host boot time: 02:12:07 UTC.
+- goldcraft-server-boot.service started at 02:12:17. The bridge requested a server start at 02:12:18 and reported Minecraft accepting connections at 02:12:42.
+- The Java server process remained present at 04:35:24 UTC (8,586 seconds after its 02:12:17 start), and the configured game TCP listener was present.
+- Live JVM arguments remained 4 GiB initial / 12 GiB maximum heap, Generational ZGC, 10 GiB soft maximum, and 300-second uncommit delay.
+- This is a second successful observed boot-start after the 21 November invocation. It does not validate unattended OS updates or every failure/recovery path.
+- No local Minecraft client Java process was present during this audit.
+
+### LOD service startup and DH/SeedGen evidence
+
+- The server Distant Horizons file was rewritten at 02:12:44 UTC. Its parsed settings match the 22 November snapshot: synchronizeOnLoad=false, real-time updates false, request distances 256 chunks, request limits 20/50, global bandwidth cap 0, per-player cap 4096 KB/s, and generatorPlan=DISABLED.
+- The VSS server config matches the published snapshot exactly. It sets service enabled, generation disabled, LOD storage enabled, and backfill disabled; network limits remain 25 MiB/s per player and 75 MiB/s global with a 1024-item queue.
+- The startup log confirms the VSS LOD request-processing service started at 02:12:46 and the LOD store became active at 02:12:48. Runtime initialization is confirmed; no client request, transfer byte count, or serving throughput was measured.
+- SeedGen 0.9.1 loaded alongside Distant Horizons 3.3.3. It skipped RetrievalQueueDepthMixin and SchedulerPriorityMixin with DH API/constant mismatch warnings. seedgen.json has enabled=true and serverGeneration=false; the DH config has generatorPlan=DISABLED.
+- Despite those values, the startup log also emits four "now generating LODs" messages and says distant terrain is full detail because the DH plan asks for it. It also prints a generic note about enableDistantGeneration, but that key is absent from the current DH file. This is contradictory startup evidence, not proof that clients are receiving generated LODs. See [LOD download loop](issues/lod-download-loop.md).
+- The startup log contains 3,000 repeated "Trying to mark a block for PostProcessing" warnings and five Seed Renderer "could not grow" warnings. Cause and gameplay impact are unknown.
+
+### Client inventory and configuration
+
+- The configured PollyMC source instance contains 100 client JARs and all 100 Fabric metadata files parse. A fresh sorted filename/size/SHA-256 comparison matches all 100 rows in the published client CSV.
+- The server contains 82 JARs: 81 metadata records parse and Feature Recycler metadata remains malformed. A fresh filename/size/SHA-256 comparison matches all 82 server CSV rows.
+- The 23 November inventory job completed at 00:02:49 UTC: 14 resource-pack entries (12 active), two shader packs, configured active shader Complementary Unbound r5.9.3, and profiles with 71/70/70 mods. All three profile archives match their manifest SHA-256 values and pass ZIP CRC checks.
+- The client-side DH config file differs from the server file: client synchronizeOnLoad=true, real-time updates true, sync distance 384, sync rate 80, and generatorPlan=SURFACE_THEN_CHUNKS; server values are false, false, 256, 50 and DISABLED. The client VSS config enables LOD receive with a 96-chunk client distance. These are on-disk client settings only; no local client process or client-side handshake was captured to establish effective values. Sanitized excerpts are in [client DH settings](../configs/client-DistantHorizons-settings.toml) and [client VSS settings](../configs/vss-client-settings.yaml).
+
+### Automation and measurement status
+
+- goldcraft-inventory.timer remains enabled and its 23 November run succeeded.
+- The user-level boot-start helper is enabled and the 23 November post-boot run succeeded.
+- arch-update.timer remains a check/notification task (arch-update --check); the root daily-upgrade unit is absent.
+- goldcraft-memory-sampler.timer remains disabled because the previous PSS values were invalid.
+- No TPS, MSPT, FPS, Spark profile, player-capacity, LOD queue, or client transfer benchmark was collected.

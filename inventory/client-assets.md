@@ -1,6 +1,6 @@
 # Client assets
 
-Inventory generated: 2026-11-22T00:02:06+00:00.
+Inventory generated: 2026-11-23T00:02:06+00:00.
 
 - Resource-pack entries: **14**, of which **12 active**.
 - Shader-pack entries: **2**.

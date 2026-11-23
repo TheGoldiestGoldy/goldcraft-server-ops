@@ -1,8 +1,8 @@
 # Client mod inventory
 
-Snapshot verified: 22 November 2026, 2026-11-22T04:20:03.241809+00:00.
+Snapshot verified: 23 November 2026, 2026-11-23T04:35:24+00:00.
 
-Source: the active Fabric 1.21.1 client. The daily inventory JSON was generated at 2026-11-22T00:02:06+00:00; at this audit, all **100 of 100 JAR filenames and byte sizes matched** that manifest, and all 100 top-level `fabric.mod.json` records parsed. SHA-256 values below were recomputed from the current JAR files during this audit. JAR binaries are not committed.
+Source: the configured PollyMC Fabric 1.21.1 instance used by the daily inventory job. The daily inventory JSON was generated at 2026-11-23T00:02:06+00:00; all **100 of 100 JAR filenames, byte sizes and SHA-256 values match** the current source and published CSV, and all 100 top-level `fabric.mod.json` records parsed. JAR binaries are not committed.
 
 | Mod | ID | Version | Environment | Size | SHA-256 |
 |---|---|---|---|---:|---|

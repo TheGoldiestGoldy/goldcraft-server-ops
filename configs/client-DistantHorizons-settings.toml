@@ -1,0 +1,23 @@
+# Selected sanitized settings from the configured PollyMC Fabric 1.21.1 client.
+# This is not a drop-in replacement. The [server] section is a local client-side
+# config snapshot; multiplayer server settings may override effective behavior.
+# Identity-bearing serverKey/serverId/levelKeyPrefix values are intentionally omitted.
+_version = 5
+
+[server]
+realTimeUpdateDistanceRadiusInChunks = 256
+synchronizeOnLoad = true
+maxSyncOnLoadRequestDistance = 384
+maxGenerationRequestDistance = 256
+generationRequestRateLimit = 20
+syncOnLoadRateLimit = 80
+enableRealTimeUpdates = true
+globalBandwidthLimit = 0
+playerBandwidthLimit = 4096
+enableAdaptiveTransferSpeed = true
+
+[common.worldGenerator]
+generatorPlan = "SURFACE_THEN_CHUNKS"
+
+[client.advanced.graphics.quality]
+lodChunkRenderDistanceRadius = 128

@@ -61,3 +61,17 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 2026-11-22 04:04–04:05 | Read-only host audit | No Java server process present; no OOM event found in the inspected journal window; latest crash report dated 1 November |
 | 2026-11-22 04:33 | Read-only VSS/DH and client-archive recheck | VSS config enables service and LOD storage while generation/backfill are disabled; no Java server process; three profile ZIPs pass CRC/SHA; client CSV matches 100/100 files; no runtime performance test |
 | 2026-11-22 04:47 | Server inventory CSV reconciliation | Rebuilt CSV from 82 current JARs, removed three stale entries; 81 metadata records parse and Feature Recycler remains malformed; CSV and Markdown inventories now both contain 82 rows |
+
+
+## Operational events (UTC; 23 November 2026)
+
+| Time | Event | Verified result / limitation |
+|---|---|---|
+| 00:02:05-00:02:49 | Daily client inventory/profile job | Completed successfully; 100 client JARs, 14 resource-pack entries (12 active), 2 shader packs and 3 profiles with 71/70/70 mods |
+| 02:12:07 | Host boot | System boot timestamp recorded |
+| 02:12:17-02:12:42 | User-level server boot helper | Start requested and bridge confirmed Minecraft accepting connections; server process remained present at 04:35 UTC |
+| 02:12:44 | Server Distant Horizons config rewritten | Parsed setting values match the published 22 November snapshot; no functional key/value change identified |
+| 02:12:45-02:12:46 | SeedGen/DH initialization | DH 3.3.3 and SeedGen 0.9.1 loaded; two SeedGen mixins skipped on API/constant mismatch; generation messages conflict with DISABLED/serverGeneration=false settings |
+| 02:12:46-02:12:48 | VSS startup | Request-processing service started and LOD store became active; no client transfer measured |
+| 02:13:05 | Latest server log update | Startup log contains 3,000 PostProcessing warning-pattern matches and five Seed Renderer feature-growth warnings; cause unknown |
+| 04:35:24 | Read-only audit | Server process and listener present; server/client inventory CSVs match 82/82 and 100/100 local JAR rows; profile ZIP CRC/SHA checks passed; no performance benchmark |
