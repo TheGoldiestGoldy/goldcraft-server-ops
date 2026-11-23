@@ -75,3 +75,5 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 02:12:46-02:12:48 | VSS startup | Request-processing service started and LOD store became active; no client transfer measured |
 | 02:13:05 | Latest server log update | Startup log contains 3,000 PostProcessing warning-pattern matches and five Seed Renderer feature-growth warnings; cause unknown |
 | 04:35:24 | Read-only audit | Server process and listener present; server/client inventory CSVs match 82/82 and 100/100 local JAR rows; profile ZIP CRC/SHA checks passed; no performance benchmark |
+
+| 2026-11-23 05:03:48 | Read-only status, memory and inventory recheck | Minecraft status protocol answered with 1.21.1/protocol 767 and 0/20 players; server process reported 10.09 GiB RSS / 10.08 GiB PSS / 0.24 GiB swap; host MemAvailable 9.24 GiB, zram use 7.27 GiB, memory PSI averages 0.00; published inventory SHA-256 rows match 82/82 server and 100/100 client JARs; status ping is not a tick/performance test |
