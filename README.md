@@ -82,7 +82,7 @@ The generator's 35–45 FPS figure is a starting target, not a measured benchmar
 - Oversized pregeneration and high server view distance caused stalls and watchdog failures.
 - Rubberbanding with distant players still needs a controlled Spark comparison.
 - A 20 November host-memory incident triggered systemd-oomd to kill 233 processes in the PollyMC scope; cause and performance impact remain unisolated ([incident report](docs/issues/memory-pressure-2026-11-20.md)).
-- The daily 07:00 OS update timer is not installed. The server boot-start service is enabled and completed one observed start successfully, but update-and-reboot automation is not active ([operations runbook](docs/operations.md)).
+- The daily 07:00 OS update timer is not installed. The server boot-start helper has three successful observed invocations (20, 21 and 23 November), but it is a one-shot start helper, not a supervisor; update-and-reboot automation is not active ([operations runbook](docs/operations.md)).
 - Connection details are distributed through the community channel; defensive settings remain private.
 
 ## Evidence standard
