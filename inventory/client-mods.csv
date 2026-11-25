@@ -46,7 +46,6 @@ irl-redactor-1.1.8+mc1.21.1.jar,irl-redactor,IRL Redactor,1.1.8+mc1.21.1,*,81087
 jei-1.21.1-fabric-19.64.0.455.jar,jei,Just Enough Items,19.64.0.455,*,2416860,1bc14659d8cf0cd9de801f56947950521134b25eb37725ce3ea94797b9165745
 litematica-fabric-1.21-0.19.61.jar,litematica,Litematica,0.19.61,client,1642590,81b66009d4e0868e9e3e2e1593e0942ba0c651ddd8300586ae1ffbd227b6ba24
 lithium-fabric-0.15.4+mc1.21.1.jar,lithium,Lithium,0.15.4+mc1.21.1,*,797454,92329d98c57f5a22091a0adb509fdb1d60113a5602c708b799b13134bad13baa
-lithosphere-1.7.jar,mr_lithosphere,Lithosphere,1.7,*,527182,2c2cc9c3de98d79feac7ea9bd0bfe367fe1d59dfefe647ca1afdd3d547d682f9
 lithostitched-1.7.13-fabric-21.1.jar,lithostitched,Lithostitched,1.7.13,*,827470,206c086604bcfea5b2862e90069470352cbf4b4d7088b55cdfa8f3452bedc270
 malilib-fabric-1.21-0.21.10.jar,malilib,MaLiLib,0.21.10,client,1411200,fed24701279ed7d55ea9e1bce9d4528e3f679ef9883c1ab7fb7a8c6a3fcd2915
 mcw-bridges-3.1.2-mc1.21.1fabric.jar,mcwbridges,Macaw's Bridges,3.1.2,*,666524,0ee00ccd82865e987ca4c0f1a57614c288385b93aa7daac8c81c5eb359934279
@@ -81,7 +80,6 @@ Oh-The-Trees-Youll-Grow-fabric-1.21.1-5.3.5.jar,ohthetreesyoullgrow,Oh The Trees
 OneConfig-1.21.1-fabric-1.7.1.jar,oneconfig,OneConfig,1.7.1,client,12363685,8d03aa2e7f126f4b0a9097328761a4869564a48f47711b62372ead7f1fcf5e8d
 packforge-fabric-1.4.1-beta.1-mc1.21.1.jar,packforge,PackForge,1.4.1-beta.1,client,398866,88cc548499367914d4ab5b5edc98641b0f8a64fbb79b54656278f80c9de05c81
 placeholder-api-2.4.2+1.21.jar,placeholder-api,Placeholder API,2.4.2+1.21,*,232325,c0187ee299527ac7a3e0b1e83601dcdc0de631e286fe41e6be1a75958ea8e443
-polyweather-1.3.1+1.21.1.jar,polyweather,PolyWeather,1.3.1,client,84602,d46a892c89de0981bc2ffed07c0c6c074940e09ed2a3fa3da39406ff52f30f68
 reflex-fabric-1.1.3+1.21.1.jar,reflex,Reflex AntiLag,1.1.3,client,36577,43c510dca27358e6e63f1e58f72870df6e3c3dd39f5ac7b73dd80a9a3835b38a
 refurbished_furniture-fabric-1.21.1-1.0.22.jar,refurbished_furniture,MrCrayfish's Furniture Mod: Refurbished,1.0.22,*,6965259,ccf5a4b585c41b9e629aedceb269e01b7488708f5440351e4a6862903dfe8ef4
 regions-unexplored-0.6.2-fabric-21.1.jar,regions_unexplored,Regions Unexplored,0.6.2,*,7018091,c0c2f1a83cbdc1f252255823e33230ace9db6f5fd6da010a739f46f7a6d3a6a7
@@ -90,12 +88,12 @@ shutterup-fabric-1.21.1-1.2.1.jar,shutterup,ShutterUp,1.2.1,*,281538,f723d0921c6
 sodium-extra-fabric-0.9.5+mc1.21.1.jar,sodium-extra,Sodium Extra,0.9.5+mc1.21.1,client,492939,ca02f490cf28be9077078f5145d39f1415d2e6ba67acc6c037ad49009d10a7b0
 sodium-fabric-0.8.13+mc1.21.1.jar,sodium,Sodium,0.8.13+mc1.21.1,client,1574609,3d43c14985a4deb19c654aad3393b454cf57e1ebcbba86c4ae6a98dfc60eca2d
 spark-1.10.109-fabric.jar,spark,spark,1.10.109,*,3609981,fafc121ac53dab1c32e74b7a1cae47d54435ba4cbeeda1180dc96675a7757047
-still-life-0.1.1.jar,mr_still_life,Still Life,0.1.1,*,4714182,0838e42c151cd4118b2baadc9fe933cc5015c611d00a54846601eb1e8b66deab
 streetscape-0.2.0-1.21.1.jar,streetscape,Streetscape,0.2.0-1.21.1,*,246384,9cf6be8c55e13daf3df97ae361c83cc9cc78c5c2d3dfcb5a54748a543e848d09
 supermartijn642corelib-1.1.25-fabric-mc1.21.jar,supermartijn642corelib,SuperMartijn642's Core Lib,1.1.25,*,622551,59c0d1fbb0d6b0ee887cb7d20b54093bc3df81cf2cdf7ca39a7b7ccd54c53939
 TerraBlender-fabric-1.21.1-4.1.0.8.jar,terrablender,TerraBlender,4.1.0.8,*,337990,f87e94a7fa1227711c3f8aea9ffac7a14e0c7be212fe50ddee95d2c6ba723cac
 Terralith_1.21.x_v2.6.2.jar,terralith,Terralith,2.6.2,*,2813817,9cd4d402fde0f523e5b430ac8fd479ce05aea7a50fe0c8c26901f5f769272214
 twilightforest-fabric-1.21.1-4.8.754.jar,twilightforest,The Twilight Forest,4.8.754,*,30861359,7f4bf512341bda95eeec0343d1233e8ef733ea599f489d60b27db13b2226fb42
+voxy-server-side-fabric.jar,lss,Voxy Server Side,0.19.0,*,9298163,052b8b0c742e77b423ee4a30dbbb0c264d09f7c1b19d7d9efc568073711d2844
 windowsize-1.0.0+1.21.jar,windowsize,Window Size,1.0.0,client,794007,263d30fb79495b59c0be4d41481849503d30d0bf435fac58eb905411b4e98f93
 worldedit-mod-7.3.8.jar,worldedit,WorldEdit,7.3.8+6939-7d32b45,*,6222854,5e7752c97876d87411e3760bcc573cc431f43c453722e6959fa7fe54db1b01ca
 xaerominimap-fabric-1.21.1-26.6.0.jar,xaerominimap,Xaero's Minimap,26.6.0,*,2234556,86bdc4282a73ed55e6a4903a7ba65940a6aed20404f7ab7c96f8d94078accd1b

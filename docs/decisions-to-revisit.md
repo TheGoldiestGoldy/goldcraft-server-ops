@@ -4,7 +4,7 @@
 |---|---|---|
 | Support 15 simultaneous players | Goal, not validated | 5/10/15-player MSPT and network tests |
 | Keep Distant Horizons server-side | Installed with sync off | One-system-at-a-time LOD trial |
-| Restore VSS serving | Store preserved, service off | Opt-in transfer test without play disruption |
+| VSS serving policy | On-disk service enabled; generation off; LOD store enabled; runtime unverified | Decide whether to disable before restart; controlled opt-in transfer test without play disruption |
 | Increase view distance above 8 | No | Busy-city and separated-player Spark profiles |
 | Resume pregeneration | No | Reviewed bounds, backup, disk forecast and short trial |
 | Replace patched Modern Furniture JAR | Not yet | Upstream release proving dedicated-server fix |

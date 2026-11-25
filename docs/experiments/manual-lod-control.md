@@ -1,10 +1,12 @@
 # Historical manual LOD control
 
 **Status: archival evidence from the Windows-era workflow, 22–24 October 2026.**
-This is not the current CachyOS runbook. The active Linux baseline keeps VSS
-disabled and DH `synchronizeOnLoad=false`; use
-[the current incident record](../issues/lod-download-loop.md) and
-[operations runbook](../operations.md) before changing either system.
+This is not the current CachyOS runbook. The latest on-disk VSS config sets
+`service.enabled=true`, `generation.enabled=false`, and
+`storage.lod_store.enabled=true`. The server was not running during the
+22 November audit, so runtime serving is unverified. Use [the current incident
+record](../issues/lod-download-loop.md) and [operations runbook](../operations.md)
+before changing either system.
 
 The associated Windows launchers are preserved under
 [`automation/windows/`](../../automation/windows/README.md). Their Java paths,

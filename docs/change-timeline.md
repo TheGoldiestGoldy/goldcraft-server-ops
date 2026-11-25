@@ -35,3 +35,47 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 2026-11-16T22:44:29.546210+00:00 | config/DistantHorizons.toml.before-range-validation-20261116.bak | file | 0.0 MiB |
 | 2026-11-16T23:01:00.073403+00:00 | maintenance/vss-restore-audit-20261116 | directory | 5.9 MiB |
 | 2026-11-16T23:06:49.471740+00:00 | maintenance/vss-restore-20261116 | directory | 5131.8 MiB |
+| 2026-11-16T23:57:48.089487+00:00 | config/vss-server-config.yaml | file | 0.0 MiB |
+
+
+## Operational events (UTC; 20–21 November 2026)
+
+| Time | Event | Verified result / limitation |
+|---|---|---|
+| 2026-11-20 14:24:39 | systemd-oomd host memory-pressure action | PollyMC scope marked for termination at 97.21% memory and 90.01% swap; 233 processes in that scope were killed |
+| 2026-11-20 14:42 | Temporary JVM memory trial | Server and client soft maximum changed from 10 GiB to 8 GiB; uncommit delay from 300 to 60 seconds; no controlled A/B result |
+| 2026-11-20 14:52:30–15:09:34 | Temporary memory sampling window | 16 observations; minimum MemAvailable 875.3 MiB; maximum swap used 11,992.2 MiB; PSS fields all zero and excluded |
+| 2026-11-20 15:10 | Memory experiment closed | Sampler timer disabled; persistent server/client settings observed restored to 10 GiB soft maximum / 300-second delay |
+| 2026-11-20 15:27:42–15:28:10 | Server boot-start unit execution | Dashboard start requested; server confirmed accepting connections; one successful run, not a complete reboot/failure test |
+| 2026-11-21 04:02 | Read-only runtime and automation check | Server/client processes present with 10 GiB / 300-second ZGC settings; root daily update timer not installed; memory sampler disabled |
+
+
+## Operational events (UTC; 21–22 November 2026)
+
+| Time | Event | Verified result / limitation |
+|---|---|---|
+| 2026-11-21 16:45:10 | User-level server boot-start unit | Bridge reported that Minecraft was accepting connections; one successful invocation only |
+| 2026-11-21 22:56:10 | Distant Horizons config file modified | Real-time radius and maximum generation/sync request distances are now 256; rate limits and bandwidth settings also differ from the earlier public config snapshot; `generatorPlan` is `DISABLED` (no distant terrain generated). No performance test |
+| 2026-11-21 23:44:57 | Latest server log update | Ends with console-handler input/output exception; no explicit clean-stop marker; process-exit cause unknown |
+| 2026-11-22 00:02:05–00:02:19 | Daily client inventory service | Exited successfully; 100 client mods, 14 resource-pack entries (12 active), 2 shader packs; generated three profile archives |
+| 2026-11-22 04:04–04:05 | Read-only host audit | No Java server process present; no OOM event found in the inspected journal window; latest crash report dated 1 November |
+| 2026-11-22 04:33 | Read-only VSS/DH and client-archive recheck | VSS config enables service and LOD storage while generation/backfill are disabled; no Java server process; three profile ZIPs pass CRC/SHA; client CSV matches 100/100 files; no runtime performance test |
+| 2026-11-22 04:47 | Server inventory CSV reconciliation | Rebuilt CSV from 82 current JARs, removed three stale entries; 81 metadata records parse and Feature Recycler remains malformed; CSV and Markdown inventories now both contain 82 rows |
+
+
+## Operational events (UTC; 23 November 2026)
+
+| Time | Event | Verified result / limitation |
+|---|---|---|
+| 00:02:05-00:02:49 | Daily client inventory/profile job | Completed successfully; 100 client JARs, 14 resource-pack entries (12 active), 2 shader packs and 3 profiles with 71/70/70 mods |
+| 02:12:07 | Host boot | System boot timestamp recorded |
+| 02:12:17-02:12:42 | User-level server boot helper | Start requested and bridge confirmed Minecraft accepting connections; server process remained present at 04:35 UTC |
+| 02:12:44 | Server Distant Horizons config rewritten | Parsed setting values match the published 22 November snapshot; no functional key/value change identified |
+| 02:12:45-02:12:46 | SeedGen/DH initialization | DH 3.3.3 and SeedGen 0.9.1 loaded; two SeedGen mixins skipped on API/constant mismatch; generation messages conflict with DISABLED/serverGeneration=false settings |
+| 02:12:46-02:12:48 | VSS startup | Request-processing service started and LOD store became active; no client transfer measured |
+| 02:13:05 | Latest server log update | Startup log contains 3,000 PostProcessing warning-pattern matches and five Seed Renderer feature-growth warnings; cause unknown |
+| 04:35:24 | Read-only audit | Server process and listener present; server/client inventory CSVs match 82/82 and 100/100 local JAR rows; profile ZIP CRC/SHA checks passed; no performance benchmark |
+
+| 2026-11-23 05:03:48 | Read-only status, memory and inventory recheck | Minecraft status protocol answered with 1.21.1/protocol 767 and 0/20 players; server process reported 10.09 GiB RSS / 10.08 GiB PSS / 0.24 GiB swap; host MemAvailable 9.24 GiB, zram use 7.27 GiB, memory PSI averages 0.00; published inventory SHA-256 rows match 82/82 server and 100/100 client JARs; status ping is not a tick/performance test |
+
+| 2026-11-23 05:13:25 | Runtime and profiler follow-up | Status ping still answered 1.21.1/protocol 767, 0/20; 11 world data files changed in prior 5 min and GC log advanced at 05:12:48; PSS 10.45 GiB, host MemAvailable 8.91 GiB, zram 7.28 GiB, PSI averages 0.00; Spark background JFR remained open/incomplete; no TPS/MSPT profile or OOM action observed |

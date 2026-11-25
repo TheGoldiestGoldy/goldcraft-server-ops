@@ -10,9 +10,9 @@ service:
 
 lod:
   distance:
-    default_chunks: 192
+    default_chunks: 256
     by_dimension:
-      "minecraft:overworld": 192
+      "minecraft:overworld": 256
       "minecraft:the_nether": 64
       "minecraft:the_end": 256
 
@@ -25,9 +25,9 @@ generation:
 
 network:
   bandwidth:
-    per_player_mib_per_second: 2
-    global_mib_per_second: 4
-  send_queue_limit_per_player: 256
+    per_player_mib_per_second: 25
+    global_mib_per_second: 75
+  send_queue_limit_per_player: 1024
   ping_backstop: true
   send_pacing: true
   yield_to_vanilla: true
@@ -45,7 +45,7 @@ storage:
   timestamp_cache_mib_per_dimension: 0
   miss_memo_ttl_seconds: 30
   lod_store:
-    enabled: false
+    enabled: true
     max_size_mib: 30720
     resweep_interval_seconds: 0
     backfill:
@@ -69,8 +69,7 @@ privacy:
     mode: "auto"
     max_y_blocks: 64
     hidden_blocks: []
-  request_no_map_ingestion: false
-
+  request_no_map_ingestion: true
 far_players:
   mode: "on"
   update_interval_ticks: 10

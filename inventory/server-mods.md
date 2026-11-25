@@ -1,6 +1,10 @@
 # Server mod inventory
 
-Count: **85**
+Count: **82 JAR files (81 parsed Fabric metadata entries, 1 malformed metadata JAR)**
+
+
+Read-only scan: 23 November 2026, 04:35 UTC. A fresh comparison confirmed all 82 CSV rows match the current top-level JAR filenames, byte sizes and SHA-256 values. The server folder contains 82 top-level JAR files and one separate disabled file. 81 top-level Fabric metadata records parse successfully; the Feature Recycler archive passes ZIP integrity but its fabric.mod.json contains an unescaped newline in a description string, so its ID/version and loader activation are unverified. The 81 parsed IDs, versions and SHA-256 hashes match the rows below. The CSV includes all 82 current JARs, with blank ID/version for the malformed Feature Recycler metadata. Three stale CSV entries for absent files (Moonlight Lib, PolyWeather and Region Discovery) were removed; why those files are absent remains unknown. Machine-readable inventory: [server-mods.csv](server-mods.csv). No JAR binaries or raw logs are included.
+
 
 SHA-256 identifies the exact tested JAR. JAR binaries are not committed.
 
@@ -32,7 +36,7 @@ SHA-256 identifies the exact tested JAR. JAR binaries are not committed.
 | Fabric API | fabric-api | 0.116.17+1.21.1 | * | 2.3 MiB | 79ac44b40780acbd884b34c50be1e39af682847e5f5cb3b1fddeeaa768dce800 |
 | Fabric Language Kotlin | fabric-language-kotlin | 1.14.2+kotlin.2.4.21 | * | 7.8 MiB | fbdbf5286ab9d65fedb49e6e01c15e338ae303eb7b9d8c7423d0a9bcfe526ef9 |
 | Fairy Lights | fairylights | 1.3.1 | * | 1.8 MiB | 0bb8e21c5376fefc65965e87a0cde033c8c83a787e19a2cd8b4068915fec6869 |
-| Feature-Recycler-fabric-2.0.1 |  |  | unknown | 0.1 MiB | d4fbd693fa3b829ef6a2d48f014abba5fa316a4997eb41a38b1ecf5aefbf7ece |
+| Feature Recycler (metadata invalid) | unparsed | unparsed | unknown | 0.1 MiB | d4fbd693fa3b829ef6a2d48f014abba5fa316a4997eb41a38b1ecf5aefbf7ece |
 | FerriteCore | ferritecore | 7.0.3 | * | 0.1 MiB | 98c3ab1d5aab8f14b5d082d3f1a467727fd335f02d124555c94339761c4c18f2 |
 | Fly Speed | flyspeed | 1.0.3 | * | 0.0 MiB | d9e3e195dde6dc73b7a82a2f0aeb9b8d659293dda45b35efc4164246bc7b2258 |
 | Forge Config API Port | forgeconfigapiport | 21.1.6 | * | 0.6 MiB | 2e3a8f0e3bda85a7d722720e7ce879cbd9d028d9395c6fc224d329b3c982d9b1 |
@@ -63,7 +67,6 @@ SHA-256 identifies the exact tested JAR. JAR binaries are not committed.
 | ModernFix | modernfix | 5.25.1+mc1.21.1 | * | 0.4 MiB | 3ce5a9ce75066961b7fa5382692bb1387cc3536cc984b064ab7d70b97f3c674c |
 | Modern Furniture | modernfurniture | 0.5.0 | * | 5.6 MiB | 5ed9ef3bd1e2dc1f3135d7950f8d844f2cd9ec660fe6bf49f48fe97f1857f28d |
 | Mod Menu | modmenu | 11.0.5 | client | 0.9 MiB | afa55fe4e7c48560126dbe654fa9647f141bc6ffd3ce35525b65dd65d88251b5 |
-| Moonlight Lib | moonlight | 1.21.1-3.7.2 | * | 2.2 MiB | 780c322348c5a414eafa7b537e2512076ea9117271372162bfa4cb186008a1b7 |
 | Minecraft Transit Railway | mtr | 4.1.0-beta.2 | * | 106.4 MiB | 5da075f7d63daea89da17348ace0959a0c216cbaf14a322d063a64bec44aae94 |
 | Mythrais | mythrais | 5.2.1-1.21.1 | * | 10.7 MiB | 06bb216897c89893670cc094c7a3c0b32fd864cc3db7e7caa085f59ce4169264 |
 | Naturalist | naturalist | 2.0.5 | * | 10.7 MiB | 2bd605a0a81a46f5508471e534d4494fb0f478eb2ff7f5857f8bed82475028f4 |
@@ -74,9 +77,7 @@ SHA-256 identifies the exact tested JAR. JAR binaries are not committed.
 | Oh The Trees You'll Grow | ohthetreesyoullgrow | 5.3.5 | * | 0.2 MiB | 3b1466bfa5c4456ec977dd04368bf115aee5e8a824dbb4ba95934f351c5801bc |
 | OneConfig | oneconfig | 1.7.1 | client | 11.8 MiB | 8d03aa2e7f126f4b0a9097328761a4869564a48f47711b62372ead7f1fcf5e8d |
 | Placeholder API | placeholder-api | 2.4.2+1.21 | * | 0.2 MiB | c0187ee299527ac7a3e0b1e83601dcdc0de631e286fe41e6be1a75958ea8e443 |
-| PolyWeather | polyweather | 1.3.1 | client | 0.1 MiB | d46a892c89de0981bc2ffed07c0c6c074940e09ed2a3fa3da39406ff52f30f68 |
 | MrCrayfish's Furniture Mod: Refurbished | refurbished_furniture | 1.0.22 | * | 6.6 MiB | ccf5a4b585c41b9e629aedceb269e01b7488708f5440351e4a6862903dfe8ef4 |
-| Region Discovery | region_discovery | 1.0 | * | 0.0 MiB | 4db08c647316e04a4d6dcf62f824a2f226d62b03637656dfa4dbd278714efff5 |
 | Regions Unexplored | regions_unexplored | 0.6.2 | * | 6.7 MiB | c0c2f1a83cbdc1f252255823e33230ace9db6f5fd6da010a739f46f7a6d3a6a7 |
 | Resourceful Lib | resourcefullib | 3.0.12 | * | 0.5 MiB | 93064c5aff85bf5e6385470f311fd1c7de172f58b02fefb1d2920db76f8cd8b5 |
 | ServerCore | servercore | 1.5.19+1.21.1 | * | 0.9 MiB | be4540227b296d1d9435a20cb5df9bfabf9f0b150592740d2db6e8d5f8533d8d |

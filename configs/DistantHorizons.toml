@@ -3,7 +3,7 @@ _version = 5
 [server]
 	#
 	# Defines the distance the player will receive updates around.
-	realTimeUpdateDistanceRadiusInChunks = 64
+	realTimeUpdateDistanceRadiusInChunks = 256
 	#
 	# Prefix of the level keys sent to the clients.
 	# If the mod is running behind a proxy, each backend should use a unique value.
@@ -12,7 +12,7 @@ _version = 5
 	#
 	# Defines the distance allowed to be synchronized around the player.
 	# Should be the same or larger than maxGenerationRequestDistance in most cases.
-	maxSyncOnLoadRequestDistance = 128
+	maxSyncOnLoadRequestDistance = 256
 	#
 	# If true, clients will receive updated LODs when joining or loading new LODs.
 	synchronizeOnLoad = false
@@ -24,7 +24,7 @@ _version = 5
 	serverKey = ""
 	#
 	# Defines the distance allowed to generate around the player.
-	maxGenerationRequestDistance = 128
+	maxGenerationRequestDistance = 256
 	#
 	# Makes the server send level keys for each world.
 	# Disable this if you use alternative ways to send level keys.
@@ -37,22 +37,22 @@ _version = 5
 	#
 	# How many LOD generation requests per second should a client send?
 	# Also limits the number of client requests allowed to stay in the server's queue.
-	generationRequestRateLimit = 4
+	generationRequestRateLimit = 20
 	#
 	# How many LOD sync requests per second should a client send?
 	# Also limits the amount of player's requests allowed to stay in the server's queue.
-	syncOnLoadRateLimit = 8
+	syncOnLoadRateLimit = 50
 	#
 	# If true, clients will receive real-time LOD updates for chunks outside the client's render distance.
-	enableRealTimeUpdates = true
+	enableRealTimeUpdates = false
 	#
 	# Maximum global speed for uploading LODs to the clients, in KB/s.
 	# Value of 0 disables the limit.
-	globalBandwidthLimit = 4096
+	globalBandwidthLimit = 0
 	#
 	# Maximum per-player speed for uploading LODs to the clients, in KB/s.
 	# Value of 0 disables the limit.
-	playerBandwidthLimit = 2048
+	playerBandwidthLimit = 4096
 	#
 	# Enables adaptive transfer speed based on client performance.
 	# If true, DH will automatically adjust transfer rate to minimize connection lag.
@@ -310,7 +310,7 @@ _version = 5
 		#
 		# DISABLED
 		# No distant terrain will be generated.
-		generatorPlan = "SURFACE_THEN_CHUNKS"
+		generatorPlan = "DISABLED"
 		#
 		# If true and the player/camera is moving quickly
 		# Distant Horizons will pause world gen to improve loading speed
@@ -975,7 +975,7 @@ _version = 5
 			# How should multiplayer save folders should be named?
 			#
 			# NAME_ONLY: Example: "Minecraft Server"
-			# IP_ONLY: Example: "192.168.1.40"
-			# NAME_IP: Example: "Minecraft Server IP 192.168.1.40"
-			# NAME_IP_PORT: Example: "Minecraft Server IP 192.168.1.40:25565"NAME_IP_PORT_MC_VERSION: Example: "Minecraft Server IP 192.168.1.40:25565 GameVersion 1.16.5"
+			# IP_ONLY: Example: "203.0.113.1"
+			# NAME_IP: Example: "Minecraft Server IP 203.0.113.1"
+			# NAME_IP_PORT: Example: "Minecraft Server IP 203.0.113.1:25565"NAME_IP_PORT_MC_VERSION: Example: "Minecraft Server IP 203.0.113.1:25565 GameVersion 1.16.5"
 			serverFolderNameMode = "NAME_ONLY"

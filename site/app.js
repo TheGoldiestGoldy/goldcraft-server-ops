@@ -1,6 +1,6 @@
 "use strict";
 
-const API_BASE = "https://goldcraft-host.tail26d0f0.ts.net";
+const API_BASE = window.location.origin;
 const TOKEN_KEY = "goldcraftAdminToken";
 const REFRESH_MS = 20000;
 
