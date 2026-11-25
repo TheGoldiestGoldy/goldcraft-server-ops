@@ -49,7 +49,7 @@ The temporary memory sampler timer is disabled. Its 16 observations had zero PSS
 ## Historical observed host state (22 November 2026)
 
 - `goldcraft-inventory.timer` is enabled and its latest daily run completed successfully at 00:02:19 UTC. The run published a 100-mod client inventory, 14 resource-pack entries (12 active), 2 shader packs and three generated profile archives. systemd reported a 2.9 GiB peak for the inventory job.
-- `goldcraft-server-boot.service` is enabled. One observed invocation on 21 November confirmed the server accepting connections; this one-shot unit does not supervise it continuously. At 04:05 UTC on 22 November no Java server process was present.
+- `goldcraft-server-boot.service` is enabled. Three observed invocations on 20, 21 and 23 November confirmed the server accepting connections; this one-shot unit does not supervise it continuously. At 04:05 UTC on 22 November no Java server process was present, while the 23 November post-boot audit found the process and listener still present at 04:35 UTC.
 - `arch-update.timer` is enabled, but `arch-update.service` runs `arch-update --check`. The command's help defines this as a notification check, not package installation.
 - The separate root-owned `goldcraft-daily-upgrade.timer` and service are not installed in the system or user systemd unit paths. Draft local source files have not been installed or end-to-end tested. Do not claim the requested 07:00 unattended OS upgrade/reboot workflow is active.
 - The temporary memory sampler timer is disabled. Its earlier PSS values were all zero, so those samples are not usable process-memory measurements.
