@@ -90,7 +90,7 @@ Before enabling a daily updater, require a portable reviewed implementation, roo
 ## Historical observed automation and server state (22 November 2026)
 
 - The daily client inventory timer is enabled and its 00:02 UTC run completed successfully. It regenerated the 100-mod inventory, client asset manifest and three profile archives. The inventory job's observed systemd memory peak was 2.9 GiB.
-- The boot-start helper is enabled and one invocation completed successfully on 21 November. It does not supervise the server continuously; at the 22 November 04:33 audit, no Java server process was present.
+- The boot-start helper is enabled and three invocations completed successfully on 20, 21 and 23 November. It does not supervise the server continuously; at the 22 November 04:33 audit, no Java server process was present. The 23 November post-boot audit later found the process and listener still present at 04:35 UTC.
 - The enabled `arch-update.timer` runs `arch-update --check`, which checks and notifies but does not install packages. The separate root-owned 07:00 upgrade timer is not installed. Do not rely on unattended OS installation or reboot/restart.
 - The memory sampler timer is disabled because its prior PSS measurements were invalid.
 - The current VSS config enables service and LOD storage on disk, with generation/backfill disabled; actual serving is unverified because no Java server process was present at 04:33 UTC.
