@@ -82,7 +82,7 @@ The temporary memory sampler is disabled. Its 16-row CSV reported zero PSS in ev
 
 **Daily OS updates are not currently enabled.** On 21 November 2026 at 04:02 UTC, the root-owned daily update timer was not found by systemd. A draft updater existed on the host, but its privileged installation did not occur and its full stop-update-reboot-restart path was not end-to-end tested. Do not assume a 07:00 package update will run.
 
-The separate user-level server boot-start unit is enabled. Its 20 November execution requested a start through the dashboard bridge and confirmed that the server accepted connections. This is one successful observed run, not proof of all reboot, update-failure or recovery paths.
+The separate user-level server boot-start unit is enabled. Three observed executions on 20, 21 and 23 November requested a start through the dashboard bridge and confirmed that the server accepted connections. On 23 November, the server process and listener were still present at 04:35 UTC. These observations do not prove every reboot, update-failure or recovery path.
 
 Before enabling a daily updater, require a portable reviewed implementation, root-owned installed files, explicit package-manager failure handling, a graceful world-save stop, verified reboot detection, a successful boot-start test, and a failure-path test proving that the server is either restored or the blocker is reported. Keep this separate from the already-working daily inventory/profile automation.
 
