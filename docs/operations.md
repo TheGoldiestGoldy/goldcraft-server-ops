@@ -102,7 +102,7 @@ A console-input `IOException` is not by itself proof of a Minecraft crash, clean
 
 ## Latest observed automation and server state (23 November 2026)
 
-- The host rebooted at 02:12:07 UTC. The enabled boot helper requested a Minecraft start and confirmed the server accepting connections at 02:12:42. The server process and game listener were still present at 04:35:24 UTC. This is one more successful boot-start observation, not continuous supervision or proof of update/reboot recovery.
+- The host rebooted at 02:12:07 UTC. The enabled boot helper requested a Minecraft start and confirmed the server accepting connections at 02:12:42. The server process and game listener were still present at 04:35:24 UTC. This is the third successful observed boot-start invocation, not continuous supervision or proof of update/reboot recovery.
 - The daily inventory job completed at 00:02:49 UTC. The current client and server CSV row sets match local JAR filenames, sizes and SHA-256 values (100 client / 82 server). All 100 client metadata records parse; one of 82 server JAR metadata files remains malformed.
 - The startup log confirms VSS request processing and the LOD store initialized. VSS generation/backfill remain disabled, but the service is not disabled. No client transfer or gameplay impact was measured.
 - SeedGen 0.9.1 reports two skipped mixins against DH 3.3.3 and emits generation messages that conflict with generatorPlan=DISABLED and serverGeneration=false. Treat this as unresolved; do not assume that the generation path is either working or inactive.
