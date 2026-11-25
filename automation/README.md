@@ -41,7 +41,7 @@ systemctl --user enable --now goldcraft-control.service goldcraft-inventory.time
 
 The daily 07:00 root-owned OS update service is **not installed**. The host-side draft and privileged installer were not installed or end-to-end tested; the system timer was reported as not found. These files are not copied here because they contain machine-specific paths and have not passed installation/reboot/failure-path validation. Do not treat OS updates or automatic post-update reboot/restart as active.
 
-The separate user-level server boot-start unit is enabled. One observed run on 20 November requested the dashboard start and confirmed that the server accepted connections. This is a successful single run, not a complete recovery certification.
+The separate user-level server boot-start unit is enabled. Three observed runs on 20, 21 and 23 November requested the dashboard start and confirmed that the server accepted connections. The 23 November process and listener remained present at 04:35 UTC. This is not a complete reboot/update recovery certification.
 
 The temporary memory sampler timer is disabled. Its 16 observations had zero PSS values throughout and its host-memory estimate was MemTotal minus MemAvailable. The script is not published as a supported tool until its PSS collection and field semantics are corrected and tested.
 
