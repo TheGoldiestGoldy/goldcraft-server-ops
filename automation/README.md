@@ -58,7 +58,7 @@ The temporary memory sampler timer is disabled. Its 16 observations had zero PSS
 ## Observed host state (23 November 2026)
 
 - The daily inventory timer remains enabled. Its 23 November run completed successfully at 00:02:49 UTC, refreshing the 100-mod client inventory, 14 resource-pack entries (12 active), two shader packs and three profile archives.
-- The enabled boot-start helper ran after the 02:12:07 UTC host boot. It requested a Minecraft start at 02:12:18 and confirmed the server accepting connections at 02:12:42; the process remained present at 04:35 UTC. This is a second successful observed invocation, not a continuous supervisor or an update/reboot recovery test.
+- The enabled boot-start helper ran after the 02:12:07 UTC host boot. It requested a Minecraft start at 02:12:18 and confirmed the server accepting connections at 02:12:42; the process remained present at 04:35 UTC. This is the third successful observed invocation, not a continuous supervisor or an update/reboot recovery test.
 - The server startup log confirms VSS request processing and LOD store initialization. This is runtime service initialization, not proof of client transfers or acceptable performance.
 - SeedGen 0.9.1 emitted two DH 3.3.3 mixin compatibility warnings and ambiguous LOD-generation messages. See the LOD issue record before changing DH, VSS or SeedGen settings.
 - arch-update.timer still invokes arch-update --check only. No root-owned daily upgrade unit is installed.
