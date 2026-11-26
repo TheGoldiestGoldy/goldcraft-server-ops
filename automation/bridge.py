@@ -88,17 +88,20 @@ def online_player_count():
 
 def server_properties():
     values = {}
+    public_keys = {"max-players", "view-distance", "simulation-distance"}
     try:
         for line in (SERVER_DIR / "server.properties").read_text(errors="replace").splitlines():
             if "=" in line and not line.startswith("#"):
                 key, value = line.split("=", 1)
-                values[key] = value
+                if key in public_keys:
+                    values[key] = value
     except OSError:
         pass
     return values
 
 def public_status():
     result = response_state()
+    result.pop("pid", None)
     mods, newest = client_mods()
     props = server_properties()
     inventory = {}
@@ -112,7 +115,6 @@ def public_status():
         "targetPlayers": 15,
         "minecraft": "1.21.1",
         "loader": "Fabric",
-        "port": int(props.get("server-port", "25566")),
         "viewDistance": int(props.get("view-distance", "8")),
         "simulationDistance": int(props.get("simulation-distance", "5")),
         "modCount": len(mods),
@@ -143,20 +145,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Headers", "Authorization, Content-Type")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Max-Age", "86400")
         self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
         self.end_headers()
         self.wfile.write(body)
-    def do_OPTIONS(self):
-        self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Headers", "Authorization, Content-Type")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Max-Age", "86400")
-        self.end_headers()
     def send_download(self, requested):
         allowed = {
             "goldcraft-mods.zip",
@@ -202,8 +194,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Disposition", f'attachment; filename="{requested}"')
         self.send_header("Accept-Ranges", "bytes")
         self.send_header("Cache-Control", "public, max-age=300")
-        self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
         if status == 206:
             self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
         self.end_headers()
@@ -247,6 +239,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-cache" if path.suffix == ".html" else "public, max-age=300")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Security-Policy", "default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'")
+        self.send_header("X-Frame-Options", "DENY")
         self.end_headers()
         self.wfile.write(body)
         return True
@@ -263,10 +257,24 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(200, public_status())
         if not self.authorized():
             return self.send_json(401, {"error": "Unauthorized"})
-        if self.path != "/status":
-            return self.send_json(404, {"error": "Not found"})
-        with LOCK:
-            return self.send_json(200, response_state("Status read from the actual Fabric server process."))
+        if request_path == "/status":
+            with LOCK:
+                return self.send_json(200, response_state("Status read from the actual Fabric server process."))
+        if request_path == "/logs":
+            match = re.search(r"(?:^|&)lines=(\d+)(?:&|$)", self.path.partition("?")[2])
+            limit = max(25, min(500, int(match.group(1)) if match else 250))
+            log_path = SERVER_DIR / "logs/latest.log"
+            try:
+                with log_path.open("rb") as handle:
+                    handle.seek(0, os.SEEK_END)
+                    size = handle.tell()
+                    handle.seek(max(0, size - 256 * 1024))
+                    raw = handle.read().decode("utf-8", errors="replace")
+                lines = raw.splitlines()[-limit:]
+                return self.send_json(200, {"lines": lines, "updatedAt": log_path.stat().st_mtime, "source": "Fabric logs/latest.log"})
+            except OSError as error:
+                return self.send_json(503, {"error": f"Could not read the Fabric log: {error}"})
+        return self.send_json(404, {"error": "Not found"})
     def do_POST(self):
         global OWNED_PROCESS, STOP_REQUESTED
         if not self.authorized():

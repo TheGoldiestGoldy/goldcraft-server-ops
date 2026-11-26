@@ -365,3 +365,20 @@ footer {
   .download-card .button { width: 100%; }
   footer { flex-direction: column; }
 }
+
+
+/* Protected live console, opened with Ctrl+Shift+B. */
+.console-panel { position: fixed; inset: 0; z-index: 200; padding: clamp(10px, 3vw, 32px); display: grid; place-items: center; background: rgba(3, 5, 10, .86); backdrop-filter: blur(12px); }
+.console-panel.hidden { display: none !important; }
+.console-window { width: min(1200px, 100%); height: min(820px, 100%); padding: clamp(16px, 2.5vw, 28px); display: flex; flex-direction: column; gap: 16px; }
+.console-header, .console-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.console-header h2 { margin-bottom: 5px; }
+.console-header p:last-child, .console-status { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+.console-output { flex: 1; min-height: 180px; margin: 0; padding: 16px; overflow: auto; border: 1px solid var(--border-bright); border-radius: 13px; color: #c8f7dc; background: #05080d; font: 12px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.console-footer { color: var(--faint); font-size: 12px; }
+@media (max-width: 680px) { .console-header, .console-footer { align-items: stretch; flex-direction: column; } .console-footer .control-actions { width: 100%; } .console-footer .button { flex: 1; } }
+
+/* Dedicated console launcher; Ctrl+Shift+B is reserved by Chromium for the bookmarks bar. */
+.nav-tabs { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.console-nav-button { color: var(--green); background: rgba(78,224,160,.08); }
+.console-nav-button:hover { color: white; background: rgba(78,224,160,.16); }

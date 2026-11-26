@@ -14,6 +14,10 @@ jobs:
           python-version: "3.12"
       - name: Compile tools
         run: python -m compileall -q tools automation
+      - name: Validate dashboard security boundaries
+        run: python tools/validate_dashboard.py
+      - name: Check dashboard JavaScript syntax
+        run: node --check site/app.js && node --check site/sw.js
       - name: Check forbidden tracked file types
         run: |
           if git ls-files | grep -E '\.(jar|zip|7z|rar|mca|mcr|nbt|log|log\.gz)$'; then
@@ -30,7 +34,7 @@ jobs:
           fi
       - name: Check personal and machine identifiers
         run: |
-          matches="$(git grep -I -n -E '([[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|[[:xdigit:]]{8}-[[:xdigit:]]{4}-[1-5][[:xdigit:]]{3}-[89abAB][[:xdigit:]]{3}-[[:xdigit:]]{12}|<HOME>/run/media/[^ <]+)' -- ':!tools/sanitize_repository.py' ':!.github/workflows/validate.yml' || true)"
+          matches="$(git grep -I -n -E '([[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|[[:xdigit:]]{8}-[[:xdigit:]]{4}-[1-5][[:xdigit:]]{3}-[89abAB][[:xdigit:]]{3}-[[:xdigit:]]{12}|<HOME>/run/media/[^ <]+|/home/[[:alnum:]_.-]+|/run/media/[[:alnum:]_.-]+|\.ts\.net)' -- ':!tools/sanitize_repository.py' ':!tools/validate_dashboard.py' ':!.github/workflows/validate.yml' || true)"
           if [ -n "$matches" ]; then
             printf '%s\n' "$matches"
             echo "Potential personal or machine identifier detected."

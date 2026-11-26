@@ -1,6 +1,6 @@
 # Findings: what worked and what did not
 
-Baseline snapshot date: 16 November 2026; follow-up findings through 23 November 2026.
+Baseline snapshot date: 16 November 2026; follow-up findings through 26 November 2026.
 
 ## Confirmed successes
 
@@ -245,3 +245,42 @@ A second loopback status request returned Minecraft 1.21.1 / protocol 767, 0/20 
 Spark's backgroundProfiler setting is true. A temporary JFR profile file was open by the server process and grew during the observation window. A read-only copy could not be parsed because no completed metadata event was present; attach-based JFR inspection did not connect within 10.5 seconds. The recording was left untouched, and no JFR metrics are claimed.
 
 Between the 05:03 and 05:13 point-in-time samples, process PSS rose from 10.08 to 10.45 GiB, host MemAvailable fell from 9.24 to 8.91 GiB, and zram usage stayed near 7.27–7.28 GiB. Memory PSI averages remained 0.00 and no systemd-oomd action or kernel OOM kill was found after the 02:12 boot. Two samples cannot establish a memory leak or sustained pressure. No TPS, MSPT, FPS, player-load or LOD-transfer benchmark was collected.
+
+## Follow-up findings: 26 November 2026
+
+### Runtime and host memory
+
+**Status: Confirmed point-in-time status and process accounting; performance unknown.**
+
+A loopback status-protocol handshake returned 1.21.1 / protocol 767 and 0/20 players. The bridge reported the server running with 3 h 40 min uptime. The server process reported 10.33 GiB RSS, 10.33 GiB PSS and 0.27 GiB swap; host MemAvailable was 14.51 GiB and memory PSI `some` averages were 0.00. The latest server log remained unchanged since 00:34:18 UTC while the GC log advanced at 04:13:15 UTC. This does not establish healthy ticking or a stable player load.
+
+### Inventory and profile archives
+
+**Status: Confirmed exact file/hash and archive-integrity checks.**
+
+All 82 server JAR rows and 100 client JAR rows match the published inventory CSVs by filename, size, metadata fields and SHA-256. Feature Recycler remains the one malformed server metadata file; its ZIP container passes integrity. All four standard client archives and all three profile archives match their recorded SHA-256 values and pass ZIP CRC checks. The profiles contain 71/70/70 mods. No mod update was needed.
+
+### DH/VSS configuration divergence
+
+**Status: Confirmed on-disk values; effective behavior untested.**
+
+The selected server DH values still match the sanitized server snapshot. The client excerpt still differs: client sync-on-load and real-time update flags are true, its maximum sync distance is 384 chunks, its sync request limit is 80, and its generator plan is SURFACE_THEN_CHUNKS; the server excerpt has sync-on-load and real-time updates false, a 256-chunk sync distance, a 50-request sync limit, and generatorPlan DISABLED. VSS server service/LOD storage remain enabled while generation/backfill are disabled. Do not infer actual client generation, transfer volume, or queue behavior from these config values.
+
+### Dashboard owner console and security review
+
+**Status: Live UI and protected route observed; hardening staged for review, not deployed.**
+
+The local dashboard served its root page, JavaScript and public status endpoint successfully. An unauthenticated request to `/logs` returned 401. The live UI includes an owner console that polls a bounded log endpoint while open and a graceful-stop control with an explicit confirmation. JavaScript syntax checks and Python bridge compilation passed. No token or log contents were retrieved.
+
+The review found four code-level issues that the stacked draft follow-up addresses:
+
+- The existing service worker intercepted every same-origin GET and cached dynamic responses, including the protected log endpoint. The proposed v5 worker caches only an exact static-asset allowlist and removes older dashboard caches on activation.
+- The live HTML CSP allowed an unnecessary external host even though the dashboard API base is same-origin. The proposed copy restricts `connect-src` to self.
+- The bridge emitted wildcard CORS headers despite serving the UI and API from the same origin. The proposed copy removes CORS/preflight handling.
+- The unauthenticated public status object included a process PID and server port. The proposed copy omits both and limits the properties read for public status.
+
+These findings indicate unnecessary exposure and cache persistence paths, not evidence that a credential or log was accessed by another party. The hardening is in a draft branch and has not been installed on the host.
+
+### Automation and measurement limits
+
+The inventory timer is active and enabled; the memory sampler timer remains disabled. The user-level arch-update timer runs `arch-update --check` only. The root-owned daily upgrade timer is absent. No TPS, MSPT, FPS, player-capacity, or controlled LOD-transfer benchmark was collected.

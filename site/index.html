@@ -31,6 +31,7 @@
     <button class="nav-tab" type="button" data-tab="mods">Mods</button>
     <button class="nav-tab" type="button" data-tab="assets">Assets</button>
     <button class="nav-tab" type="button" data-tab="admin">Server control</button>
+    <button id="consoleOpenButton" class="nav-tab console-nav-button" type="button" aria-haspopup="dialog">Live console</button>
   </nav>
 
   <main>
@@ -133,6 +134,13 @@
     </section>
   </main>
 
+  <section id="consolePanel" class="console-panel hidden" role="dialog" aria-modal="true" aria-labelledby="consoleTitle">
+    <div class="console-window card">
+      <header class="console-header"><div><p class="eyebrow">OWNER ONLY · LIVE SERVER OUTPUT</p><h2 id="consoleTitle">Minecraft console</h2><p id="consoleStatus" class="console-status">Waiting for authorization</p></div><button id="closeConsoleButton" class="button secondary" type="button" aria-label="Close console">Close · Esc</button></header>
+      <pre id="consoleOutput" class="console-output" aria-live="off">Unlock server control on the Admin tab to view the protected log.</pre>
+      <footer class="console-footer"><span id="consoleUpdated">Log refreshes every 2 seconds while open</span><div class="control-actions"><button id="refreshConsoleButton" class="button secondary" type="button">Refresh log</button><button id="consoleStopButton" class="button danger" type="button">Graceful stop server</button></div></footer>
+    </div>
+  </section>
   <footer><span>Goldcraft server operations</span><span>Hosted free through Tailscale Funnel</span></footer>
   <div id="toast" class="toast hidden" role="status"></div>
 </body>

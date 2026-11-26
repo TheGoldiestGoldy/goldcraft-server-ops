@@ -108,3 +108,11 @@ A console-input `IOException` is not by itself proof of a Minecraft crash, clean
 - SeedGen 0.9.1 reports two skipped mixins against DH 3.3.3 and emits generation messages that conflict with generatorPlan=DISABLED and serverGeneration=false. Treat this as unresolved; do not assume that the generation path is either working or inactive.
 - The client DH/VSS config excerpts differ from the server settings. No local client process or client-side handshake was captured, so effective client settings are unknown.
 - arch-update.timer remains check-only; the root-owned daily upgrade unit is absent. The memory sampler timer remains disabled. No TPS/MSPT/FPS or player-capacity measurement was collected.
+
+## Dashboard owner console
+
+The dashboard includes a **Live console** view. It can be opened from the dashboard navigation or with Ctrl+Alt+B. Unlock the Admin tab with the owner token first; the UI stores that token in the current browser profile's localStorage. Do not use a shared browser profile.
+
+While open, the console requests the latest bounded log excerpt through the token-protected `/logs` route every two seconds. Closing the panel stops polling. The log text is inserted as text, not HTML. The console's stop control asks for confirmation before sending the graceful-stop request; wait for the world save and process exit before maintenance. Never copy raw console output, player names, UUIDs or coordinates into public reports.
+
+The same-origin cache/CSP/CORS hardening and public-status field minimization are in the stacked draft follow-up. They are not deployed by this repository update alone.
