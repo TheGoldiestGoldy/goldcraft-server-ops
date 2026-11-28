@@ -3,6 +3,15 @@
 const API_BASE = "";
 const TOKEN_KEY = "goldcraftAdminToken";
 const REFRESH_MS = 20000;
+const DOWNLOAD_PATHS = new Set([
+  "/download/goldcraft-mods.zip",
+  "/download/goldcraft-active-resourcepacks.zip",
+  "/download/goldcraft-shaderpacks.zip",
+  "/download/goldcraft-client-files.zip",
+  "/download/goldcraft-profile-mobile-amethyst.zip",
+  "/download/goldcraft-profile-basic-laptop.zip",
+  "/download/goldcraft-profile-nice-laptop.zip",
+]);
 
 let liveData = null;
 let adminData = null;
@@ -58,6 +67,24 @@ function formatDate(value) {
 
 function cleanMinecraftText(value) {
   return String(value || "").replace(/§./g, "").trim();
+}
+
+function safeDownloadUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return null;
+  try {
+    const url = new URL(value, window.location.origin);
+    if (
+      url.origin !== window.location.origin ||
+      url.username ||
+      url.password ||
+      url.search ||
+      url.hash ||
+      !DOWNLOAD_PATHS.has(url.pathname)
+    ) return null;
+    return url.href;
+  } catch {
+    return null;
+  }
 }
 
 async function request(path, options = {}) {
@@ -162,10 +189,15 @@ function renderProfiles(profiles) {
     (profile.notes || []).slice(0, 3).forEach((item) => notes.append(node("li", "", item)));
     card.append(notes);
 
-    const link = node("a", "button primary", `Download · ${formatBytes(profile.bytes)}`);
-    link.href = API_BASE + profile.url;
-    link.rel = "noreferrer";
-    card.append(link);
+    const downloadUrl = safeDownloadUrl(profile.url);
+    if (downloadUrl) {
+      const link = node("a", "button primary", `Download · ${formatBytes(profile.bytes)}`);
+      link.href = downloadUrl;
+      link.rel = "noreferrer";
+      card.append(link);
+    } else {
+      card.append(node("span", "download-meta", "Download unavailable"));
+    }
     grid.append(card);
   });
 }
@@ -189,10 +221,15 @@ function renderDownloads(downloads) {
     info.append(hash);
     card.append(info);
 
-    const link = node("a", "button secondary", "Download");
-    link.href = API_BASE + item.url;
-    link.rel = "noreferrer";
-    card.append(link);
+    const downloadUrl = safeDownloadUrl(item.url);
+    if (downloadUrl) {
+      const link = node("a", "button secondary", "Download");
+      link.href = downloadUrl;
+      link.rel = "noreferrer";
+      card.append(link);
+    } else {
+      card.append(node("span", "download-meta", "Download unavailable"));
+    }
     grid.append(card);
   });
   if (!grid.children.length) grid.append(node("div", "card section-card", "Downloads are unavailable while the host is offline."));
@@ -395,6 +432,7 @@ function closeConsole() {
 
 function bindEvents() {
   document.addEventListener("keydown", (event) => {
+    if (event.repeat) return;
     if (event.ctrlKey && event.altKey && !event.shiftKey && event.key.toLowerCase() === "b") {
       event.preventDefault();
       if ($("#consolePanel").classList.contains("hidden")) openConsole(); else closeConsole();
