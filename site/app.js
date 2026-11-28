@@ -1,8 +1,17 @@
 "use strict";
 
-const API_BASE = window.location.origin;
+const API_BASE = "";
 const TOKEN_KEY = "goldcraftAdminToken";
 const REFRESH_MS = 20000;
+const DOWNLOAD_PATHS = new Set([
+  "/download/goldcraft-mods.zip",
+  "/download/goldcraft-active-resourcepacks.zip",
+  "/download/goldcraft-shaderpacks.zip",
+  "/download/goldcraft-client-files.zip",
+  "/download/goldcraft-profile-mobile-amethyst.zip",
+  "/download/goldcraft-profile-basic-laptop.zip",
+  "/download/goldcraft-profile-nice-laptop.zip",
+]);
 
 let liveData = null;
 let adminData = null;
@@ -58,6 +67,24 @@ function formatDate(value) {
 
 function cleanMinecraftText(value) {
   return String(value || "").replace(/§./g, "").trim();
+}
+
+function safeDownloadUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return null;
+  try {
+    const url = new URL(value, window.location.origin);
+    if (
+      url.origin !== window.location.origin ||
+      url.username ||
+      url.password ||
+      url.search ||
+      url.hash ||
+      !DOWNLOAD_PATHS.has(url.pathname)
+    ) return null;
+    return url.href;
+  } catch {
+    return null;
+  }
 }
 
 async function request(path, options = {}) {
@@ -162,10 +189,15 @@ function renderProfiles(profiles) {
     (profile.notes || []).slice(0, 3).forEach((item) => notes.append(node("li", "", item)));
     card.append(notes);
 
-    const link = node("a", "button primary", `Download · ${formatBytes(profile.bytes)}`);
-    link.href = API_BASE + profile.url;
-    link.rel = "noreferrer";
-    card.append(link);
+    const downloadUrl = safeDownloadUrl(profile.url);
+    if (downloadUrl) {
+      const link = node("a", "button primary", `Download · ${formatBytes(profile.bytes)}`);
+      link.href = downloadUrl;
+      link.rel = "noreferrer";
+      card.append(link);
+    } else {
+      card.append(node("span", "download-meta", "Download unavailable"));
+    }
     grid.append(card);
   });
 }
@@ -189,10 +221,15 @@ function renderDownloads(downloads) {
     info.append(hash);
     card.append(info);
 
-    const link = node("a", "button secondary", "Download");
-    link.href = API_BASE + item.url;
-    link.rel = "noreferrer";
-    card.append(link);
+    const downloadUrl = safeDownloadUrl(item.url);
+    if (downloadUrl) {
+      const link = node("a", "button secondary", "Download");
+      link.href = downloadUrl;
+      link.rel = "noreferrer";
+      card.append(link);
+    } else {
+      card.append(node("span", "download-meta", "Download unavailable"));
+    }
     grid.append(card);
   });
   if (!grid.children.length) grid.append(node("div", "card section-card", "Downloads are unavailable while the host is offline."));
@@ -352,7 +389,79 @@ async function runControl(action) {
   }
 }
 
+let consoleTimer = null;
+let consoleScrollPinned = true;
+
+async function refreshConsole() {
+  const output = $("#consoleOutput");
+  if (!getToken()) {
+    $("#consoleStopButton").disabled = true;
+    output.textContent = "Unlock the owner controls on the Admin tab first. The console log is protected.";
+    setText("#consoleStatus", "Authorization required");
+    return;
+  }
+  $("#consoleStopButton").disabled = false;
+  try {
+    const data = await adminRequest("/logs?lines=400");
+    const wasAtBottom = output.scrollHeight - output.scrollTop - output.clientHeight < 48;
+    output.textContent = (data.lines || []).join("\n") || "The server log is currently empty.";
+    if (wasAtBottom || consoleScrollPinned) output.scrollTop = output.scrollHeight;
+    setText("#consoleStatus", `Connected · ${data.source || "server log"}`);
+    setText("#consoleUpdated", `Updated ${new Date().toLocaleTimeString()}`);
+  } catch (error) {
+    setText("#consoleStatus", `Log unavailable · ${error.message}`);
+    if (error.status === 401) output.textContent = "Your saved owner token was rejected. Re-enter it on the Admin tab.";
+  }
+}
+
+function openConsole() {
+  $("#consolePanel").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  refreshConsole();
+  clearInterval(consoleTimer);
+  consoleTimer = setInterval(refreshConsole, 2000);
+  $("#closeConsoleButton").focus();
+}
+
+function closeConsole() {
+  $("#consolePanel").classList.add("hidden");
+  document.body.style.overflow = "";
+  clearInterval(consoleTimer);
+  consoleTimer = null;
+}
+
 function bindEvents() {
+  document.addEventListener("keydown", (event) => {
+    if (event.repeat) return;
+    if (event.ctrlKey && event.altKey && !event.shiftKey && event.key.toLowerCase() === "b") {
+      event.preventDefault();
+      if ($("#consolePanel").classList.contains("hidden")) openConsole(); else closeConsole();
+    } else if (event.key === "Escape" && !$("#consolePanel").classList.contains("hidden")) {
+      closeConsole();
+    }
+  });
+  $("#consoleOpenButton").addEventListener("click", openConsole);
+  $("#closeConsoleButton").addEventListener("click", closeConsole);
+  $("#refreshConsoleButton").addEventListener("click", refreshConsole);
+  $("#consoleOutput").addEventListener("scroll", () => {
+    const output = $("#consoleOutput");
+    consoleScrollPinned = output.scrollHeight - output.scrollTop - output.clientHeight < 48;
+  });
+  $("#consoleStopButton").addEventListener("click", async () => {
+    if (!window.confirm("Gracefully stop Minecraft? Connected players will be disconnected after the world saves.")) return;
+    $("#consoleStopButton").disabled = true;
+    try {
+      const data = await adminRequest("/stop", { method: "POST" });
+      setText("#consoleStatus", data.message || "Graceful stop requested.");
+      showToast(data.message || "Graceful stop requested.");
+      await refreshConsole();
+      setTimeout(() => { refreshAdmin().catch(() => {}); refreshPublic(false).catch(() => {}); }, 1500);
+    } catch (error) {
+      showToast(`Stop request failed: ${error.message}`);
+    } finally {
+      $("#consoleStopButton").disabled = false;
+    }
+  });
   $$(".nav-tab").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tab)));
   $$("[data-tab-target]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tabTarget)));
   $("#modSearch").addEventListener("input", renderMods);

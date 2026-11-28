@@ -63,3 +63,9 @@ The temporary memory sampler timer is disabled. Its 16 observations had zero PSS
 - SeedGen 0.9.1 emitted two DH 3.3.3 mixin compatibility warnings and ambiguous LOD-generation messages. See the LOD issue record before changing DH, VSS or SeedGen settings.
 - arch-update.timer still invokes arch-update --check only. No root-owned daily upgrade unit is installed.
 - The memory sampler timer remains disabled because its previous PSS measurements were invalid. No new TPS, MSPT, FPS or player-load benchmark was collected.
+
+## Dashboard console and same-origin API
+
+The bridge serves an allowlisted static dashboard from the same loopback origin as its API. `/public` is read-only; `/status`, `/logs`, `/start` and `/stop` require the bearer token. The log route returns at most 500 lines from a bounded tail of the current Fabric log and uses no-store JSON. The bridge binds to loopback; do not expose it directly.
+
+The owner console polls logs only while open and stops polling when closed. The browser stores the owner token in localStorage, so use a trusted browser profile. The proposed hardening removes wildcard CORS, omits PID/port from public status, applies a same-origin CSP, and makes the service worker cache static assets only. These changes are in a draft pull request and have not been installed on the live host.

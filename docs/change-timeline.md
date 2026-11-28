@@ -79,3 +79,15 @@ Derived from configuration backups and dated maintenance artifacts. Existence do
 | 2026-11-23 05:03:48 | Read-only status, memory and inventory recheck | Minecraft status protocol answered with 1.21.1/protocol 767 and 0/20 players; server process reported 10.09 GiB RSS / 10.08 GiB PSS / 0.24 GiB swap; host MemAvailable 9.24 GiB, zram use 7.27 GiB, memory PSI averages 0.00; published inventory SHA-256 rows match 82/82 server and 100/100 client JARs; status ping is not a tick/performance test |
 
 | 2026-11-23 05:13:25 | Runtime and profiler follow-up | Status ping still answered 1.21.1/protocol 767, 0/20; 11 world data files changed in prior 5 min and GC log advanced at 05:12:48; PSS 10.45 GiB, host MemAvailable 8.91 GiB, zram 7.28 GiB, PSI averages 0.00; Spark background JFR remained open/incomplete; no TPS/MSPT profile or OOM action observed |
+
+## Operational events (UTC; 26 November 2026)
+
+| Time | Event | Verified result / limitation |
+|---|---|---|
+| 00:01:08-00:01:15 | Daily inventory/profile job | Inventory and profile metadata generated; 82 server / 100 client JAR rows later matched the published CSVs; all four standard archives and three profiles passed SHA-256 and ZIP CRC checks |
+| 00:34:18 | Server latest.log timestamp | Latest log file's modification time; it remained unchanged during the 04:13 audit |
+| 00:54:13-00:54:19 | Dashboard bridge file/service | Bridge source modification and user service start; service remained active at the 04:13 audit |
+| 01:04:38-01:13:26 | Local dashboard assets | Owner-console UI and HTML panel present on disk; local app.js and service-worker syntax checks passed |
+| 04:13:15 | Server GC log | GC log modification time advanced; this is not a TPS/MSPT measurement |
+| 04:13:39 | Read-only runtime audit | Minecraft status handshake returned 1.21.1/protocol 767, 0/20; process uptime 3 h 40 min; PSS/RSS 10.33/10.33 GiB, process swap 0.27 GiB, host MemAvailable 14.51 GiB, PSI some averages 0.00; no gameplay benchmark |
+| 04:13 UTC | Dashboard security review | Static page and public endpoint returned 200; unauthenticated /logs returned 401; service-worker dynamic caching, unused CSP host allowance, wildcard CORS and public PID/port identified for draft hardening |

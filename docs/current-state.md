@@ -239,3 +239,44 @@ A second read-only status request again returned Minecraft 1.21.1 / protocol 767
 The 05:13 process snapshot reported **10.46 GiB RSS**, **10.45 GiB PSS**, and **0.23 GiB process swap**. Host MemAvailable was **8.91 GiB**, zram usage **7.28 GiB**, and memory PSI avg10/avg60/avg300 remained **0.00** for both some and full pressure. Compared with the 05:03 sample, PSS increased from 10.08 to 10.45 GiB and MemAvailable fell from 9.24 to 8.91 GiB, while zram usage was effectively unchanged. Two samples do not establish a leak or sustained trend. No systemd-oomd kill/pressure action or kernel OOM kill was found in the post-boot journal window.
 
 Spark's backgroundProfiler setting is enabled. A temporary JFR profile file was open by the server process and grew during the observation window. A read-only copy could not be parsed because it lacked a completed metadata event; attach-based JFR inspection also failed to connect within 10.5 seconds. No profile metrics were extracted and the live recording was not stopped or modified.
+
+## Latest verified runtime and inventory snapshot (26 November 2026, 04:13 UTC)
+
+This was a read-only host inspection. A loopback Minecraft status-protocol handshake returned Minecraft **1.21.1 / protocol 767**, with **0 of 20 players** online. The bridge's public status endpoint reported the server running with **3 h 40 min** process uptime. A status response does not establish tick health, client login, LOD delivery, or player-visible performance.
+
+| Measurement | 04:13 UTC observation |
+|---|---:|
+| Server JVM RSS | 10.33 GiB |
+| Server JVM PSS | 10.33 GiB |
+| Server process swap | 0.27 GiB |
+| Host MemAvailable | 14.51 GiB |
+| Memory PSI `some` avg10 / avg60 / avg300 | 0.00 / 0.00 / 0.00 |
+| Latest server log modification | 00:34:18 UTC |
+| Server GC log modification | 04:13:15 UTC |
+
+These are point-in-time accounting values, not a capacity benchmark. The latest server log had not advanced since startup even though the GC log continued to update. No TPS, MSPT, FPS, client-login, or multiplayer-load measurement was collected.
+
+### Inventory and client package verification
+
+- Server inventory: **82/82** JAR filenames, sizes, metadata fields and SHA-256 values match the published CSV. **81/82** metadata files parse; Feature Recycler remains the one malformed metadata entry. All 82 ZIP containers pass integrity checks.
+- Client inventory: **100/100** JAR rows match the published CSV; all 100 metadata files parse and all ZIP containers pass integrity checks.
+- The daily inventory snapshot was generated at 00:01:09 UTC and profile metadata at 00:01:15 UTC. It records 14 resource-pack entries (12 active), two shader packs, and shaders enabled.
+- All four standard client archives and all three profile archives exist, match their recorded SHA-256 values, and pass ZIP CRC checks. Profile mod counts remain mobile 71, basic laptop 70, and nice laptop 70.
+
+### Automation state
+
+- `goldcraft-inventory.timer` is active and enabled. Its last trigger was 00:01:08 WET; its next scheduled run is 27 November at 00:02:38 WET.
+- `goldcraft-memory-sampler.timer` remains disabled. The current PSS value above was read directly from `/proc`, not from the invalid historical sampler.
+- `goldcraft-control.service` is active. The one-shot `goldcraft-server-boot.service` is enabled but inactive after its run; it is not a continuous supervisor.
+- The user-level `arch-update.timer` is active, but its service runs `arch-update --check` only. The root-owned `goldcraft-daily-upgrade.timer` and service are not installed. Unattended 07:00 package installation/reboot/recovery is not operational.
+
+### Current sanitized LOD configuration excerpts
+
+The selected values still match the existing sanitized config snapshots; no new config snapshot was required. Identity-bearing DH fields and SeedGen/world data were not copied.
+
+- Server DH: `generatorPlan=DISABLED`, `synchronizeOnLoad=false`, `enableRealTimeUpdates=false`, generation/sync distances 256 chunks, request limits 20/50, per-player limit 4096 KB/s, global limit 0.
+- Client DH: `generatorPlan=SURFACE_THEN_CHUNKS`, `synchronizeOnLoad=true`, `enableRealTimeUpdates=true`, generation/sync distances 256/384 chunks, request limits 20/80, per-player limit 4096 KB/s.
+- VSS server: service and LOD store enabled; generation and backfill disabled; queue limit 1024; configured bandwidth 25 MiB/s per player and 75 MiB/s global.
+- VSS client: LOD receive enabled at 96 chunks with adaptive rate enabled; map ingestion disabled.
+
+The client/server DH excerpts remain different. These are configuration values, not proof of effective generation or transfer behavior. A controlled separated-player test and a complete Spark profile remain outstanding.
