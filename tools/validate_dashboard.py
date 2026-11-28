@@ -51,8 +51,8 @@ require(re.search(r'const API_BASE = (""|window\.location\.origin);', app) is no
 require('adminRequest("/logs?lines=400")' in app, "app.js: owner console log request missing")
 
 download_block = bridge.split("    def send_download(self, requested):", 1)[1].split("    def send_static", 1)[0]
-bridge_downloads = set(re.findall(r'"(goldcraft-[^"]+\\.zip)"', download_block))
-app_downloads = set(re.findall(r'"/download/(goldcraft-[^"]+\\.zip)"', app))
+bridge_downloads = set(re.findall(r'"(goldcraft-[^"]+\.zip)"', download_block))
+app_downloads = set(re.findall(r'"/download/(goldcraft-[^"]+\.zip)"', app))
 require(bridge_downloads == app_downloads,
         "app.js: browser download allowlist must match the bridge allowlist")
 require("function safeDownloadUrl(value)" in app,
