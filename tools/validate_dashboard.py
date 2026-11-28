@@ -49,6 +49,20 @@ if csp:
 require(re.search(r'const API_BASE = (""|window\.location\.origin);', app) is not None,
         "app.js: API base must remain same-origin")
 require('adminRequest("/logs?lines=400")' in app, "app.js: owner console log request missing")
+
+download_block = bridge.split("    def send_download(self, requested):", 1)[1].split("    def send_static", 1)[0]
+bridge_downloads = set(re.findall(r'"(goldcraft-[^"]+\\.zip)"', download_block))
+app_downloads = set(re.findall(r'"/download/(goldcraft-[^"]+\\.zip)"', app))
+require(bridge_downloads == app_downloads,
+        "app.js: browser download allowlist must match the bridge allowlist")
+require("function safeDownloadUrl(value)" in app,
+        "app.js: download URLs must pass the same-origin allowlist")
+require("url.origin !== window.location.origin" in app and "!DOWNLOAD_PATHS.has(url.pathname)" in app,
+        "app.js: download URL validation must reject external and unlisted paths")
+require("link.href = downloadUrl;" in app and "link.href = API_BASE + item.url" not in app and "link.href = API_BASE + profile.url" not in app,
+        "app.js: untrusted inventory URLs must not be assigned directly to links")
+require('aria-keyshortcuts="Control+Alt+B"' in index and "event.repeat" in app,
+        "dashboard: document the Ctrl+Alt+B fallback and ignore key-repeat toggles")
 require("consoleStopButton" in app and "window.confirm(" in app,
         "app.js: graceful-stop confirmation missing")
 require("innerHTML" not in app, "app.js: do not inject untrusted log text as HTML")
