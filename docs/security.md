@@ -27,5 +27,6 @@ The 26 November draft follow-up makes these boundaries explicit in code:
 3. Wildcard CORS and the unused OPTIONS handler are removed because the UI and API are same-origin.
 4. Public status omits the server PID and network port. The public properties reader is limited to max players and view/simulation distance.
 5. The bounded `/logs` route remains behind bearer authorization and returns no-store JSON.
+6. Browser download links are restricted to the same-origin, seven-file archive allowlist enforced by the bridge. The repository validator checks that the browser and bridge allowlists stay identical; invalid inventory URLs are rendered as unavailable rather than clickable links.
 
 These changes are in a stacked draft pull request, not deployed. The running host was not modified during this audit. Recheck the deployed bridge and service worker after a deliberate maintenance-window rollout.
